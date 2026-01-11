@@ -7,7 +7,7 @@
 
 ## X-License: Licensed under the MIT License. See the LICENSE file in the project root for details.
 ## X-Website: https://github.com/Jeremy-Gstein/AccountPlayed
-## X-Curse-Project-ID: 
+## X-Curse-Project-ID: 1426046
 
 AccountPlayed.lua
 MinimapButton.lua

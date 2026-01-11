@@ -12,7 +12,7 @@ on:
       - '**'
     paths-ignore:
       - '.github/**'
-      - 'build.sh'
+      - 'justfile'
       - 'README.md'
 
 # a workflow is built up as jobs, and within these jobs are steps
