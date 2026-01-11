@@ -1,0 +1,10 @@
+## Interface: 120001
+## Version: 1.0.0
+## Title: Account Played
+## Notes: get account /played!
+## Author: Jeremy-Gstein
+## SavedVariables: AccountPlayedDB
+
+
+AccountPlayed.lua
+MinimapButton.lua
