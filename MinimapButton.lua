@@ -1,27 +1,66 @@
 --------------------------------------------------
 -- Account Played Minimap Button
+-- Hybrid snap/free-form positioning system:
+--   - Snaps to minimap edge when close (works with round minimap)
+--   - Breaks free for arbitrary positioning (works with square minimap / ElvUI)
+--   - Saves x,y offset relative to Minimap center between sessions
 --------------------------------------------------
 local BUTTON_NAME = "AccountPlayed_MinimapButton"
-AccountPlayedMinimapDB = AccountPlayedMinimapDB or {
-    angle = 225,
-}
+
+-- Migrate from old angle-only format or initialize defaults.
+-- New format stores x,y offsets from Minimap center.
+local function InitDB()
+    if not AccountPlayedMinimapDB then
+        AccountPlayedMinimapDB = {}
+    end
+
+    -- Migrate: if old angle-based data exists, convert to x,y
+    if AccountPlayedMinimapDB.angle and not AccountPlayedMinimapDB.x then
+        local angle = math.rad(AccountPlayedMinimapDB.angle)
+        local radius = 105
+        AccountPlayedMinimapDB.x = math.cos(angle) * radius
+        AccountPlayedMinimapDB.y = math.sin(angle) * radius
+        AccountPlayedMinimapDB.angle = nil
+    end
+
+    -- Default position: bottom-left of minimap (equivalent to old 225 degrees)
+    if not AccountPlayedMinimapDB.x then
+        local angle = math.rad(225)
+        local radius = 105
+        AccountPlayedMinimapDB.x = math.cos(angle) * radius
+        AccountPlayedMinimapDB.y = math.sin(angle) * radius
+    end
+end
 
 --------------------------------------------------
--- Positioning (based on LibDBIcon)
+-- Positioning
 --------------------------------------------------
 local function UpdateButtonPosition(button)
-    local angle = math.rad(AccountPlayedMinimapDB.angle or 225)
-    local x, y, q = math.cos(angle), math.sin(angle), 1
-    
-    if x < 0 then q = q + 1 end
-    if y > 0 then q = q + 2 end
-    
-    -- For round minimaps, always use 80 radius
-    x, y = x * 105, y * 105
-    
+    local x = AccountPlayedMinimapDB.x or 0
+    local y = AccountPlayedMinimapDB.y or 0
     button:ClearAllPoints()
     button:SetPoint("CENTER", Minimap, "CENTER", x, y)
 end
+
+-- Save the button's current position as an offset from Minimap center
+local function SaveButtonPosition(button)
+    local bx, by = button:GetCenter()
+    local mx, my = Minimap:GetCenter()
+    if bx and mx then
+        AccountPlayedMinimapDB.x = bx - mx
+        AccountPlayedMinimapDB.y = by - my
+    end
+end
+
+--------------------------------------------------
+-- Drag logic constants
+-- These define concentric distance zones around the minimap center:
+--   <= radSnap  : snap to the minimap edge (circular behavior)
+--   <= radPull  : resist pulling away if currently snapped
+--   <= radFree  : gradual transition from snapped to free
+--   >  radFree  : fully free-form positioning
+--------------------------------------------------
+local RADIUS_ADJUST = -5  -- tighten the snap ring slightly
 
 --------------------------------------------------
 -- Creation
@@ -31,16 +70,20 @@ local function CreateMinimapButton()
         UpdateButtonPosition(_G[BUTTON_NAME])
         return
     end
-    
+
     local btn = CreateFrame("Button", BUTTON_NAME, Minimap)
-    btn:SetSize(31, 31)  -- LibDBIcon uses 31x31
+    btn:SetSize(31, 31)
     btn:SetFrameStrata("MEDIUM")
     btn:SetFrameLevel(8)
+    btn:SetMovable(true)
     btn:EnableMouse(true)
     btn:RegisterForClicks("LeftButtonUp")
     btn:RegisterForDrag("LeftButton")
     btn:SetClampedToScreen(true)
-    
+
+    -- Track whether the icon is snapped to the minimap edge
+    btn.snapped = true
+
     --------------------------------------------------
     -- Border (OVERLAY, positioned first)
     --------------------------------------------------
@@ -48,7 +91,7 @@ local function CreateMinimapButton()
     btn.border:SetSize(53, 53)
     btn.border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
     btn.border:SetPoint("TOPLEFT")
-    
+
     --------------------------------------------------
     -- Icon (ARTWORK layer, smaller size)
     --------------------------------------------------
@@ -57,12 +100,12 @@ local function CreateMinimapButton()
     btn.icon:SetTexture("Interface\\Icons\\INV_Misc_PocketWatch_01")
     btn.icon:SetPoint("CENTER")
     btn.icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
-    
+
     --------------------------------------------------
     -- Highlight
     --------------------------------------------------
     btn:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight", "ADD")
-    
+
     --------------------------------------------------
     -- Tooltip
     --------------------------------------------------
@@ -76,40 +119,90 @@ local function CreateMinimapButton()
     btn:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
-    
+
     --------------------------------------------------
     -- Click
     --------------------------------------------------
     btn:SetScript("OnClick", function()
         SlashCmdList.ACCOUNTPLAYEDPOPUP()
     end)
-    
+
     --------------------------------------------------
-    -- Drag
+    -- Drag (hybrid snap / free-form)
     --------------------------------------------------
     btn:SetScript("OnDragStart", function(self)
-        self:SetScript("OnUpdate", function()
-            local mx, my = Minimap:GetCenter()
+        self.isDragging = true
+        self:SetScript("OnUpdate", function(self)
+            local minimap = Minimap
+            local mx, my = minimap:GetCenter()
+            local scale = minimap:GetEffectiveScale()
+
+            -- Cursor position in the same coordinate space as minimap
             local cx, cy = GetCursorPosition()
-            local scale = Minimap:GetEffectiveScale()
             cx, cy = cx / scale, cy / scale
-            local angle = math.deg(math.atan2(cy - my, cx - mx)) % 360
-            AccountPlayedMinimapDB.angle = angle
-            UpdateButtonPosition(self)
+
+            -- Vector from minimap center to cursor
+            local dx, dy = cx - mx, cy - my
+            local dist = (dx * dx + dy * dy) ^ 0.5
+
+            -- Compute snap/free zone radii based on current minimap size
+            local edgeRadius = (minimap:GetWidth() + self:GetWidth()) / 2
+            local radSnap = edgeRadius + RADIUS_ADJUST
+            local radPull = edgeRadius + self:GetWidth() * 0.2
+            local radFree = edgeRadius + self:GetWidth() * 0.7
+
+            -- Determine whether to clamp to the edge ring
+            local radClamp
+            if dist <= radSnap then
+                -- Close to minimap: snap to edge
+                self.snapped = true
+                radClamp = radSnap
+            elseif dist < radPull and self.snapped then
+                -- Slightly beyond edge but still snapped: hold at edge
+                radClamp = radSnap
+            elseif dist < radFree and self.snapped then
+                -- Transition zone: gradually release
+                radClamp = radSnap + (dist - radPull) / 2
+            else
+                -- Far enough away: free positioning
+                self.snapped = false
+            end
+
+            -- If clamping, scale the offset vector to the clamp radius
+            if radClamp and dist > 0 then
+                local factor = radClamp / dist
+                dx = dx * factor
+                dy = dy * factor
+            end
+
+            -- Apply position
+            AccountPlayedMinimapDB.x = dx
+            AccountPlayedMinimapDB.y = dy
+            self:ClearAllPoints()
+            self:SetPoint("CENTER", minimap, "CENTER", dx, dy)
         end)
     end)
+
     btn:SetScript("OnDragStop", function(self)
+        self.isDragging = false
         self:SetScript("OnUpdate", nil)
+        -- Save final position (already stored in DB during drag)
     end)
-    
+
+    -- Determine initial snap state from saved position
+    local edgeRadius = (Minimap:GetWidth() + btn:GetWidth()) / 2
+    local savedDist = (AccountPlayedMinimapDB.x ^ 2 + AccountPlayedMinimapDB.y ^ 2) ^ 0.5
+    btn.snapped = (savedDist <= edgeRadius + btn:GetWidth() * 0.3)
+
     UpdateButtonPosition(btn)
 end
 
 --------------------------------------------------
 -- Init
 --------------------------------------------------
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
+local initFrame = CreateFrame("Frame")
+initFrame:RegisterEvent("PLAYER_LOGIN")
+initFrame:SetScript("OnEvent", function()
+    InitDB()
     CreateMinimapButton()
 end)
