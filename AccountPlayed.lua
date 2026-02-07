@@ -116,7 +116,7 @@ local function CreateRow(parent, width, height)
     -- Class name
     row.classText = row:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     row.classText:SetPoint("LEFT", 0, 0)
-    row.classText:SetWidth(100)
+    row.classText:SetWidth(120)
     row.classText:SetJustifyH("LEFT")
 
     -- Status bar (dynamic width via anchors)
