@@ -46,6 +46,11 @@ local function FormatTimeSmart(seconds, useYears)
     else
         local h = math.floor(hours)
         local m = math.floor((seconds % 3600) / 60)
+        if h >= 24 then
+            local days = math.floor(h / 24)
+            local remH = h % 24
+            return string.format("%dd %dh %dm", days, remH, m)
+        end
         return string.format("%dh %dm", h, m)
     end
 end
