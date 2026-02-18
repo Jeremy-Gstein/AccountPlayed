@@ -9,6 +9,7 @@ L["NO_DATA"] = "No data yet"
 L["TOTAL"] = "TOTAL: "
 L["DEBUG_HEADER"] = "[AccountPlayed Debug] Known characters:"
 L["DB_CORRUPTED"] = "Account Played: SavedVariables corrupted, resetting!"
+L["CLICK_TO_PRINT"] = "Click to print in chat"
 L["USE_YEARS_LABEL"] = "Years"
 L["TIME_FORMAT_TITLE"] = "Time Format"
 L["TIME_FORMAT_YEARS"] = "Checked: Years/Days"
@@ -37,17 +38,26 @@ L["TIME_UNIT_HOUR"] = "h"
 L["TIME_UNIT_MINUTE"] = "m"
 
 -- Delete command strings
-L["CMD_DELETE_USAGE"]     = "Usage: /apdelete CharName-RealmName" -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_SUCCESS"]   = "Account Played: Removed '%s' from the database." -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_NOT_FOUND"] = "Account Played: Character '%s' not found in the database." -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_CONFIRM"]   = "Are you sure you want to remove |cffffff00%s|r from Account Played?" -- (AI-GENERATED TRANSLATION)
-
+L["CMD_DELETE_USAGE"]     = "Usage: /apdelete CharName-RealmName"
+L["CMD_DELETE_SUCCESS"]   = "Account Played: Removed '%s' from the database."
+L["CMD_DELETE_NOT_FOUND"] = "Account Played: Character '%s' not found in the database."
+L["CMD_DELETE_CONFIRM"]   = "Are you sure you want to remove |cffffff00%s|r from Account Played?"
 
 -- Character management panel strings
-L["CHAR_PANEL_RIGHT_CLICK"] = "Right-Click to manage characters" -- (AI-GENERATED TRANSLATION)
-L["CHAR_PANEL_REMOVE_TIP"]  = "Remove from Account Played" -- (AI-GENERATED TRANSLATION)
-L["CLICK_TO_PRINT"] = "Left-Click to print in chat" -- (AI-GENERATED TRANSLATION)
+L["CHAR_PANEL_RIGHT_CLICK"] = "Right-click to manage characters"
+L["CHAR_PANEL_REMOVE_TIP"]  = "Remove from Account Played"
 
+-- Lifetime stats strings
+L["STATS_BUTTON"]       = "Lifetime Stats"
+L["STATS_TOOLTIP"]      = "Print lifetime playtime statistics to chat"
+L["STATS_HEADER"]       = "Account Played - Lifetime Statistics"
+L["STATS_TOTAL_HOURS"]  = "Total Hours Played"
+L["STATS_FREE_TIME"]    = "Free Time Since WoW Release"
+L["STATS_PCT_FREE"]     = "Free Time Spent Playing WoW"
+L["STATS_PCT_AWAKE"]    = "Awake Time Spent Playing WoW"
+L["STATS_YEARS"]        = "Years Equivalent"
+L["STATS_NO_DATA"]      = "No playtime recorded yet. Log in on each character first."
+L["STATS_CMD"]          = "/apstats"
 
 if GetLocale() == "zhCN" then
     L["ADDON_NAME"] = "账号游戏时间"
@@ -83,15 +93,27 @@ if GetLocale() == "zhCN" then
     L["TIME_UNIT_HOUR"] = "小时"
     L["TIME_UNIT_MINUTE"] = "分钟"
 
-    -- Delete command strings
-    L["CMD_DELETE_USAGE"]     = "用法: /apdelete 角色名-服务器名"
-    L["CMD_DELETE_SUCCESS"]   = "Account Played: 已从数据库中移除 '%s'。"
-    L["CMD_DELETE_NOT_FOUND"] = "Account Played: 数据库中未找到角色 '%s'。"
-    L["CMD_DELETE_CONFIRM"]   = "确定要从 Account Played 中移除 |cffffff00%s|r 吗？"
+    -- Delete command strings (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_USAGE"]     = "用法: /apdelete 角色名-服务器名"            -- (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_SUCCESS"]   = "Account Played: 已从数据库中移除 '%s'。"    -- (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_NOT_FOUND"] = "Account Played: 数据库中未找到角色 '%s'。"  -- (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_CONFIRM"]   = "确定要从 Account Played 中移除 |cffffff00%s|r 吗？" -- (AI-GENERATED TRANSLATION)
 
-    -- Character management panel strings
-    L["CHAR_PANEL_RIGHT_CLICK"] = "右键点击管理角色"
-    L["CHAR_PANEL_REMOVE_TIP"]  = "从 Account Played 中移除"
+    -- Character management panel strings (AI-GENERATED TRANSLATION)
+    L["CHAR_PANEL_RIGHT_CLICK"] = "右键点击管理角色"          -- (AI-GENERATED TRANSLATION)
+    L["CHAR_PANEL_REMOVE_TIP"]  = "从 Account Played 中移除"  -- (AI-GENERATED TRANSLATION)
+
+    -- Lifetime stats strings (AI-GENERATED TRANSLATION)
+    L["STATS_BUTTON"]       = "终生统计"                                    -- (AI-GENERATED TRANSLATION)
+    L["STATS_TOOLTIP"]      = "在聊天框中输出终生游戏时间统计"              -- (AI-GENERATED TRANSLATION)
+    L["STATS_HEADER"]       = "Account Played - 终生统计"                   -- (AI-GENERATED TRANSLATION)
+    L["STATS_TOTAL_HOURS"]  = "总游戏小时数"                               -- (AI-GENERATED TRANSLATION)
+    L["STATS_FREE_TIME"]    = "自WoW发布以来的空闲时间"                    -- (AI-GENERATED TRANSLATION)
+    L["STATS_PCT_FREE"]     = "空闲时间用于游玩WoW"                        -- (AI-GENERATED TRANSLATION)
+    L["STATS_PCT_AWAKE"]    = "清醒时间用于游玩WoW"                        -- (AI-GENERATED TRANSLATION)
+    L["STATS_YEARS"]        = "相当于游戏年数"                              -- (AI-GENERATED TRANSLATION)
+    L["STATS_NO_DATA"]      = "尚无游戏记录，请先登录每个角色。"           -- (AI-GENERATED TRANSLATION)
+    L["STATS_CMD"]          = "/apstats"
 end
 
 if GetLocale() == "zhTW" then
@@ -128,13 +150,25 @@ if GetLocale() == "zhTW" then
     L["TIME_UNIT_HOUR"] = "小時"
     L["TIME_UNIT_MINUTE"] = "分鐘"
 
-    -- Delete command strings
-    L["CMD_DELETE_USAGE"]     = "用法: /apdelete 角色名-伺服器名" -- (AI-GENERATED TRANSLATION)
-    L["CMD_DELETE_SUCCESS"]   = "Account Played: 已從資料庫中移除 '%s'。" -- (AI-GENERATED TRANSLATION)
-    L["CMD_DELETE_NOT_FOUND"] = "Account Played: 資料庫中未找到角色 '%s'。" -- (AI-GENERATED TRANSLATION)
+    -- Delete command strings (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_USAGE"]     = "用法: /apdelete 角色名-伺服器名"            -- (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_SUCCESS"]   = "Account Played: 已從資料庫中移除 '%s'。"    -- (AI-GENERATED TRANSLATION)
+    L["CMD_DELETE_NOT_FOUND"] = "Account Played: 資料庫中未找到角色 '%s'。"  -- (AI-GENERATED TRANSLATION)
     L["CMD_DELETE_CONFIRM"]   = "確定要從 Account Played 中移除 |cffffff00%s|r 嗎？" -- (AI-GENERATED TRANSLATION)
 
-    -- Character management panel strings
-    L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色" -- (AI-GENERATED TRANSLATION)
-    L["CHAR_PANEL_REMOVE_TIP"]  = "從 Account Played 中移除" -- (AI-GENERATED TRANSLATION)
+    -- Character management panel strings (AI-GENERATED TRANSLATION)
+    L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色"          -- (AI-GENERATED TRANSLATION)
+    L["CHAR_PANEL_REMOVE_TIP"]  = "從 Account Played 中移除"  -- (AI-GENERATED TRANSLATION)
+
+    -- Lifetime stats strings (AI-GENERATED TRANSLATION)
+    L["STATS_BUTTON"]       = "終生統計"                                    -- (AI-GENERATED TRANSLATION)
+    L["STATS_TOOLTIP"]      = "在聊天視窗中輸出終生遊戲時間統計"           -- (AI-GENERATED TRANSLATION)
+    L["STATS_HEADER"]       = "Account Played - 終生統計"                   -- (AI-GENERATED TRANSLATION)
+    L["STATS_TOTAL_HOURS"]  = "總遊戲小時數"                               -- (AI-GENERATED TRANSLATION)
+    L["STATS_FREE_TIME"]    = "自WoW發布以來的空閒時間"                    -- (AI-GENERATED TRANSLATION)
+    L["STATS_PCT_FREE"]     = "空閒時間用於遊玩WoW"                        -- (AI-GENERATED TRANSLATION)
+    L["STATS_PCT_AWAKE"]    = "清醒時間用於遊玩WoW"                        -- (AI-GENERATED TRANSLATION)
+    L["STATS_YEARS"]        = "相當於遊戲年數"                              -- (AI-GENERATED TRANSLATION)
+    L["STATS_NO_DATA"]      = "尚無遊戲記錄，請先登錄每個角色。"           -- (AI-GENERATED TRANSLATION)
+    L["STATS_CMD"]          = "/apstats"
 end

@@ -727,6 +727,25 @@ local function CreatePopup()
     
     f.formatCheckbox = checkBox
 
+    -- Lifetime Stats button — centered at the bottom, clear of TOTAL (left) and Years checkbox (right)
+    local statsBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    statsBtn:SetSize(130, 20)
+    statsBtn:SetPoint("BOTTOM", f, "BOTTOM", 0, 16)
+    statsBtn:SetText("r/theydidthemath")
+    statsBtn:GetFontString():SetTextColor(1, 0.82, 0)
+    statsBtn:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_TOP")
+        GameTooltip:SetText(L["STATS_TOOLTIP"], 1, 1, 1, 1)
+        GameTooltip:Show()
+    end)
+    statsBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    statsBtn:SetScript("OnClick", function()
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        if AP.PrintPlaytimeStats then
+            AP.PrintPlaytimeStats()
+        end
+    end)
+
     -- Display update method
     f.UpdateDisplay = function(self)
         local totals = GetClassTotals()

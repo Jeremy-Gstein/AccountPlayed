@@ -12,4 +12,5 @@
 
 Localization.lua
 AccountPlayed.lua
+Calculatetimeplayed.lua
 MinimapButton.lua
