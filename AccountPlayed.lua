@@ -837,3 +837,65 @@ AP.mainFrame:SetScript("OnEvent", function(self, event, ...)
         end
     end
 end)
+
+--------------------------------------------------
+-- Minimap Toggle Slash Command  /aplayed minimap
+--------------------------------------------------
+
+SLASH_ACCOUNTPLAYED1 = "/aplayed"
+SlashCmdList.ACCOUNTPLAYED = function(input)
+    input = (input or ""):match("^%s*(.-)%s*$"):lower()
+    if input == "minimap" then
+        local btn = _G["AccountPlayed_MinimapButton"]
+        if btn then
+            if btn:IsShown() then
+                btn:Hide()
+                AccountPlayedMinimapDB.hidden = true
+                print("|cff00ff00Account Played:|r Minimap icon hidden. Use /aplayed minimap to show it again.")
+            else
+                btn:Show()
+                AccountPlayedMinimapDB.hidden = false
+                print("|cff00ff00Account Played:|r Minimap icon shown.")
+            end
+        end
+    else
+        print("AccountPlayed commands: /aplayed minimap")
+    end
+end
+
+--------------------------------------------------
+-- Persist minimap hidden state across sessions
+--------------------------------------------------
+
+local persistFrame = CreateFrame("Frame")
+persistFrame:RegisterEvent("PLAYER_LOGIN")
+persistFrame:SetScript("OnEvent", function(self)
+    C_Timer.After(0, function()
+        if AccountPlayedMinimapDB and AccountPlayedMinimapDB.hidden then
+            local btn = _G["AccountPlayed_MinimapButton"]
+            if btn then btn:Hide() end
+        end
+    end)
+    self:UnregisterEvent("PLAYER_LOGIN")
+end)
+
+--------------------------------------------------
+-- LibDataBroker plugin
+--   Allows LDB display addons (Bazooka, Titan Panel, etc.)
+--   to show an AccountPlayed data source.
+--------------------------------------------------
+
+local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AccountPlayed", {
+    type = "data source",
+    text = "AccountPlayed",
+    icon = "Interface\\Icons\\INV_Misc_PocketWatch_01",
+    OnTooltipShow = function(tooltip)
+        tooltip:AddLine("|cffffffffAccount Played|r")
+        tooltip:AddLine("Click to toggle the played time window")
+    end,
+    OnClick = function(_, button)
+        if button == "LeftButton" then
+            SlashCmdList.ACCOUNTPLAYEDPOPUP()
+        end
+    end,
+})
