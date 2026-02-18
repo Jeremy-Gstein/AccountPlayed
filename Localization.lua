@@ -138,3 +138,50 @@ if GetLocale() == "zhTW" then
     L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色" -- (AI-GENERATED TRANSLATION)
     L["CHAR_PANEL_REMOVE_TIP"]  = "從 Account Played 中移除" -- (AI-GENERATED TRANSLATION)
 end
+
+if GetLocale() == "frFR" then
+    L["ADDON_NAME"] = "Account Played"
+    L["WINDOW_TITLE"] = "Account Played - Temps par Classe"
+    L["NO_DATA"] = "Aucune donnée"
+    L["TOTAL"] = "Total : "
+    L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personnages connus :"
+    L["DB_CORRUPTED"] = "Account Played: SavedVariables corrompu, réinitialisation!"
+    L["USE_YEARS_LABEL"] = "Années"
+    L["TIME_FORMAT_TITLE"] = "Format de temps"
+    L["TIME_FORMAT_YEARS"] = "Coché: Années/Jours"
+    L["TIME_FORMAT_HOURS"] = "Non coché: Heures/Minutes"
+
+    -- Minimap Button strings
+    L["TOOLTIP_TITLE"] = "Account Played"
+    L["TOOLTIP_LEFT_CLICK"] = "Clic gauche :"
+    L["TOOLTIP_RIGHT_CLICK"] = "Clic droit :"
+    L["TOOLTIP_TOGGLE_WINDOW"] = "Ouvrir la fenêtre"
+    L["TOOLTIP_DRAG_MOVE"] = "Déplacer :"
+    L["TOOLTIP_MOVE_ICON"] = "Déplacer l'icône"
+    L["TOOLTIP_LOCK_UNLOCK"] = "Verrouiller/Déverrouiller la position de l'icône"
+
+    L["STATUS_LOCKED"] = "VERROUILLÉ"
+    L["STATUS_UNLOCKED"] = "DEVERROUILLÉ"
+
+    L["MSG_BUTTON_LOCKED"] = "Le bouton est verrouillé. Clic droit pour deverrouiller."
+    L["MSG_BUTTON_STATUS"] = "Bouton de la minicarte %s"
+    L["MSG_RESET_SUCCESS"] = "Position du bouton de la minicarte réinitialisée à la valeur par défaut."
+    L["MSG_RESET_NEXT"] = "Le bouton de la minicarte apparaîtra à la position par défaut lors du prochain login."
+
+    L["TIME_UNIT_YEAR"] = "a"
+    L["TIME_UNIT_DAY"] = "j"
+    L["TIME_UNIT_HOUR"] = "h"
+    L["TIME_UNIT_MINUTE"] = "m"
+
+    -- Delete command strings
+    L["CMD_DELETE_USAGE"]     = "Utilisation : /apdelete NomPersonnage-NomServeur"
+    L["CMD_DELETE_SUCCESS"]   = "Account Played : '%s' supprimé de la base de données."
+    L["CMD_DELETE_NOT_FOUND"] = "Account Played : Personnage '%s' non trouvé dans la base de données."
+    L["CMD_DELETE_CONFIRM"]   = "Êtes-vous sûr de vouloir supprimer |cffffff00%s|r de Account Played?"
+
+
+    -- Character management panel strings
+    L["CHAR_PANEL_RIGHT_CLICK"] = "Clic droit pour gérer les personnages"
+    L["CHAR_PANEL_REMOVE_TIP"]  = "Supprimer de Account Played"
+    L["CLICK_TO_PRINT"] = "Clic gauche pour afficher dans le chat"
+end
