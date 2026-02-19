@@ -42,7 +42,7 @@ classic_path := if os == "unix" {
 }
 
 # ADDON FILES (.lua .toc etc..)
-files := "*.lua *.toc"
+files := "*.lua *.toc Libs/"
 
 # just list available commands B)
 _default:
@@ -70,7 +70,7 @@ sync-all:
 
 sync target:
   mkdir -p "{{ if target == 'beta' { beta_path } else if target == 'classic' { classic_path } else { retail_path } }}/{{ addon_name }}"
-  cp {{ files }} "{{ if target == 'beta' { beta_path } else if target == 'classic' { classic_path } else { retail_path } }}/{{ addon_name }}"
+  cp -r {{ files }} "{{ if target == 'beta' { beta_path } else if target == 'classic' { classic_path } else { retail_path } }}/{{ addon_name }}"
   ls -larth "{{ if target == 'beta' { beta_path } else if target == 'classic' { classic_path } else { retail_path } }}/{{ addon_name }}"
   @echo "Done! /rl to see changes in game."
 
