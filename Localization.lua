@@ -31,22 +31,33 @@ L["MSG_BUTTON_STATUS"] = "Minimap button %s"
 L["MSG_RESET_SUCCESS"] = "Minimap button position reset to default."
 L["MSG_RESET_NEXT"] = "Minimap button will appear at default position on next login."
 
+-- Slash command strings
+L["MSG_MINIMAP_HIDDEN"]   = "Minimap icon hidden. Use /aplayed minimap to show it again."
+L["MSG_MINIMAP_SHOWN"]    = "Minimap icon shown."
+L["MSG_MINIMAP_NOT_INIT"] = "Minimap button not yet initialized."
+L["CMD_HELP_HEADER"]      = "commands:"
+L["CMD_HELP_MINIMAP_DESC"] = "toggle minimap icon on/off"
+L["CMD_HELP_RESET_DESC"]   = "reset icon to default position and show it"
+L["CMD_HELP_SHOW_DESC"]    = "toggle class time window"
+L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[DEPRECATED]|r /apclasswin will be removed in a future update. Please use |cffffff00/aplayed show|r instead."
+L["MSG_CMD_DEPRECATED"]   = "|cffff4400[DEPRECATED]|r /apresetmap will be removed in a future update. Please use |cffffff00/aplayed reset|r instead."
+
 L["TIME_UNIT_YEAR"] = "y"
 L["TIME_UNIT_DAY"] = "d"
 L["TIME_UNIT_HOUR"] = "h"
 L["TIME_UNIT_MINUTE"] = "m"
 
 -- Delete command strings
-L["CMD_DELETE_USAGE"]     = "Usage: /apdelete CharName-RealmName" -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_SUCCESS"]   = "Account Played: Removed '%s' from the database." -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_NOT_FOUND"] = "Account Played: Character '%s' not found in the database." -- (AI-GENERATED TRANSLATION)
-L["CMD_DELETE_CONFIRM"]   = "Are you sure you want to remove |cffffff00%s|r from Account Played?" -- (AI-GENERATED TRANSLATION)
+L["CMD_DELETE_USAGE"]     = "Usage: /apdelete CharName-RealmName" 
+L["CMD_DELETE_SUCCESS"]   = "Account Played: Removed '%s' from the database." 
+L["CMD_DELETE_NOT_FOUND"] = "Account Played: Character '%s' not found in the database." 
+L["CMD_DELETE_CONFIRM"]   = "Are you sure you want to remove |cffffff00%s|r from Account Played?" 
 
 
 -- Character management panel strings
-L["CHAR_PANEL_RIGHT_CLICK"] = "Right-Click to manage characters" -- (AI-GENERATED TRANSLATION)
-L["CHAR_PANEL_REMOVE_TIP"]  = "Remove from Account Played" -- (AI-GENERATED TRANSLATION)
-L["CLICK_TO_PRINT"] = "Left-Click to print in chat" -- (AI-GENERATED TRANSLATION)
+L["CHAR_PANEL_RIGHT_CLICK"] = "Right-Click to manage characters" 
+L["CHAR_PANEL_REMOVE_TIP"]  = "Remove from Account Played" 
+L["CLICK_TO_PRINT"] = "Left-Click to print in chat" 
 
 
 if GetLocale() == "zhCN" then
@@ -77,6 +88,17 @@ if GetLocale() == "zhCN" then
     L["MSG_BUTTON_STATUS"] = "小地图图标 %s"
     L["MSG_RESET_SUCCESS"] = "小地图图标位置已重置为默认。"
     L["MSG_RESET_NEXT"] = "小地图图标将在下次登录时出现在默认位置。"
+
+    -- Slash command strings
+    L["MSG_MINIMAP_HIDDEN"]    = "小地图图标已隐藏。使用 /aplayed minimap 重新显示。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_SHOWN"]     = "小地图图标已显示。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_NOT_INIT"]  = "小地图按钮尚未初始化。" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_HEADER"]       = "命令：" -- (AI-GENERATED TRANSLATION) -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_MINIMAP_DESC"] = "切换小地图图标显示/隐藏" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_RESET_DESC"]   = "重置图标到默认位置并显示" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_SHOW_DESC"]    = "切换职业时间窗口" -- (AI-GENERATED TRANSLATION)
+    L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已弃用]|r /apclasswin 将在未来版本中移除。请改用 |cffffff00/aplayed show|r。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_CMD_DEPRECATED"]    = "|cffff4400[已弃用]|r /apresetmap 将在未来版本中移除。请改用 |cffffff00/aplayed reset|r。" -- (AI-GENERATED TRANSLATION)
     
     L["TIME_UNIT_YEAR"] = "年"
     L["TIME_UNIT_DAY"] = "天"
@@ -123,6 +145,17 @@ if GetLocale() == "zhTW" then
     L["MSG_RESET_SUCCESS"] = "小地圖圖示位置已重置為默認。"
     L["MSG_RESET_NEXT"] = "小地圖圖示將在下次登錄時出現在默認位置。"
 
+    -- Slash command strings
+    L["MSG_MINIMAP_HIDDEN"]    = "小地圖圖示已隱藏。使用 /aplayed minimap 重新顯示。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_SHOWN"]     = "小地圖圖示已顯示。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_NOT_INIT"]  = "小地圖按鈕尚未初始化。" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_HEADER"]       = "命令："
+    L["CMD_HELP_MINIMAP_DESC"] = "切換小地圖圖示顯示/隱藏" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_RESET_DESC"]   = "重置圖示到默認位置並顯示" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_SHOW_DESC"]    = "切換職業時間視窗" -- (AI-GENERATED TRANSLATION)
+    L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已棄用]|r /apclasswin 將在未來版本中移除。請改用 |cffffff00/aplayed show|r。" -- (AI-GENERATED TRANSLATION)
+    L["MSG_CMD_DEPRECATED"]    = "|cffff4400[已棄用]|r /apresetmap 將在未來版本中移除。請改用 |cffffff00/aplayed reset|r。" -- (AI-GENERATED TRANSLATION)
+
     L["TIME_UNIT_YEAR"] = "年"
     L["TIME_UNIT_DAY"] = "天"
     L["TIME_UNIT_HOUR"] = "小時"
@@ -167,6 +200,17 @@ if GetLocale() == "frFR" then
     L["MSG_BUTTON_STATUS"] = "Bouton de la minicarte %s"
     L["MSG_RESET_SUCCESS"] = "Position du bouton de la minicarte réinitialisée à la valeur par défaut."
     L["MSG_RESET_NEXT"] = "Le bouton de la minicarte apparaîtra à la position par défaut lors du prochain login."
+
+    -- Slash command strings
+    L["MSG_MINIMAP_HIDDEN"]    = "Icône de la minicarte masquée. Utilisez /aplayed minimap pour la réafficher." -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_SHOWN"]     = "Icône de la minicarte affichée." -- (AI-GENERATED TRANSLATION)
+    L["MSG_MINIMAP_NOT_INIT"]  = "Le bouton de la minicarte n'est pas encore initialisé." -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_HEADER"]       = "commandes :" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_MINIMAP_DESC"] = "afficher/masquer l'icône de la minicarte" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_RESET_DESC"]   = "réinitialiser l'icône à sa position par défaut et l'afficher" -- (AI-GENERATED TRANSLATION)
+    L["CMD_HELP_SHOW_DESC"]    = "afficher/masquer la fenêtre des temps par classe" -- (AI-GENERATED TRANSLATION)
+    L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLÈTE]|r /apclasswin sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed show|r à la place." -- (AI-GENERATED TRANSLATION)
+    L["MSG_CMD_DEPRECATED"]    = "|cffff4400[OBSOLÈTE]|r /apresetmap sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed reset|r à la place." -- (AI-GENERATED TRANSLATION)
 
     L["TIME_UNIT_YEAR"] = "a"
     L["TIME_UNIT_DAY"] = "j"
