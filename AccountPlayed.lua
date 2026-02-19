@@ -799,8 +799,8 @@ end
 -- Slash Commands
 --------------------------------------------------
 
-SLASH_ACCOUNTPLAYEDPOPUP1 = "/apclasswin"
-SlashCmdList.ACCOUNTPLAYEDPOPUP = function()
+-- Core toggle logic, called by /aplayed show and the deprecated /apclasswin
+AP.ToggleClassWindow = function()
     if AP.popupFrame and AP.popupFrame:IsShown() then
         PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE)
         AP.popupFrame:Hide()
@@ -808,6 +808,13 @@ SlashCmdList.ACCOUNTPLAYEDPOPUP = function()
         PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
         UpdatePopup()
     end
+end
+
+-- Deprecated alias: /apclasswin  (kept for backwards compatibility)
+SLASH_ACCOUNTPLAYEDPOPUP1 = "/apclasswin"
+SlashCmdList.ACCOUNTPLAYEDPOPUP = function()
+    print("|cff00ff00Account Played:|r " .. L["MSG_CLASSWIN_DEPRECATED"])
+    AP.ToggleClassWindow()
 end
 
 --------------------------------------------------
@@ -839,7 +846,7 @@ AP.mainFrame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 --------------------------------------------------
--- Minimap Toggle Slash Command  /aplayed minimap
+-- Minimap Slash Commands  /aplayed show | /aplayed minimap | /aplayed reset
 --------------------------------------------------
 
 SLASH_ACCOUNTPLAYED1 = "/aplayed"
@@ -848,18 +855,42 @@ SlashCmdList.ACCOUNTPLAYED = function(input)
     if input == "minimap" then
         local btn = _G["AccountPlayed_MinimapButton"]
         if btn then
-            if btn:IsShown() then
-                btn:Hide()
+            if not AccountPlayedMinimapDB.hidden then
+                -- Hide the button
                 AccountPlayedMinimapDB.hidden = true
-                print("|cff00ff00Account Played:|r Minimap icon hidden. Use /aplayed minimap to show it again.")
+                UIFrameFadeRemoveFrame(btn)  -- cancel any in-progress fade
+                btn:SetAlpha(0)
+                btn:EnableMouse(false)
+                btn:Hide()
+                print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_HIDDEN"])
             else
-                btn:Show()
+                -- Show the button
                 AccountPlayedMinimapDB.hidden = false
-                print("|cff00ff00Account Played:|r Minimap icon shown.")
+                btn:EnableMouse(true)
+                btn:Show()
+                -- Snapped buttons stay at low alpha until mouse-over; free buttons are always visible
+                if btn.snapped then
+                    btn:SetAlpha(0.01)
+                else
+                    btn:SetAlpha(1)
+                end
+                print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
             end
         end
+    elseif input == "show" then
+        AP.ToggleClassWindow()
+    elseif input == "reset" then
+        -- Reset position to default and clear hidden state
+        if AP.ResetMinimapButton then
+            AP.ResetMinimapButton()
+        else
+            print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_NOT_INIT"])
+        end
     else
-        print("AccountPlayed commands: /aplayed minimap")
+        print("|cff00ff00Account Played:|r " .. L["CMD_HELP_HEADER"])
+        print("  |cffffff00/aplayed show|r     - " .. L["CMD_HELP_SHOW_DESC"])
+        print("  |cffffff00/aplayed minimap|r  - " .. L["CMD_HELP_MINIMAP_DESC"])
+        print("  |cffffff00/aplayed reset|r    - " .. L["CMD_HELP_RESET_DESC"])
     end
 end
 
@@ -873,7 +904,10 @@ persistFrame:SetScript("OnEvent", function(self)
     C_Timer.After(0, function()
         if AccountPlayedMinimapDB and AccountPlayedMinimapDB.hidden then
             local btn = _G["AccountPlayed_MinimapButton"]
-            if btn then btn:Hide() end
+            if btn then
+                btn:EnableMouse(false)
+                btn:Hide()
+            end
         end
     end)
     self:UnregisterEvent("PLAYER_LOGIN")
@@ -895,7 +929,7 @@ local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AccountPlayed", {
     end,
     OnClick = function(_, button)
         if button == "LeftButton" then
-            SlashCmdList.ACCOUNTPLAYEDPOPUP()
+            AP.ToggleClassWindow()
         end
     end,
 })
