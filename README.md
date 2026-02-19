@@ -5,20 +5,28 @@ Simple WoW addon to track and display /played time. sorting by class across all 
 
 <img width="791" height="339" alt="image" src="https://github.com/user-attachments/assets/dda71859-7138-45f5-91b9-e8bc22eaa8cc" />
 
-Features:
-- View your accounts top played time by class
-- sorted by (class/total account /played) as a percentage
-- small popup ui (resize, drag, move, and scroll as you please!)
-- minimap button to toggle ui (fades when mouse is not over minimap).
-- (NEW) Hover over classes to get a popup of all characters making up the playtime.
-- (NEW) Button to Toggle between Years/Days or Hours/Min
-- (NEW) Press escape to close window
-- (NEW/Work-in-Progress) Localized framework currently supporting enUS, zhCN, zhTW 
+**Features:**
+- View your account's top played time by class
+- Sorted by (class / total account played) as a percentage
+- Small popup UI (resize, drag, move, and scroll as you please!)
+- Minimap button to toggle UI (fades when mouse is not over minimap)
+- Hover over classes to get a popup of all characters making up the playtime
+- Button to toggle between Years/Days or Hours/Min
+- Press Escape to close window
+- **(NEW)** Rework existing slash commands to use a more consistent name: `/aplayed`
+- **(NEW)** `/aplayed minimap` - remove the minimap icon (toggle on/off OR use `/aplayed reset` and run `/reload`)
+- **(NEW/Work-in-Progress)** Localized framework currently supporting enUS, zhCN, zhTW, frFR
 
-Usage:
-- `/apclasswin` - open/close account played window (OR use minimap button)
-- `/apdebug`    - prints a list of all stored characters to chat in the following format: `Realm-Name: TimePlayed (CLASS)`
-- `/apresetmap` - reset the position of minimap button to bottom left of minimap  
+**Usage:**
+- `/aplayed`         - list available commands
+- `/aplayed show`    - toggle class time window
+- `/aplayed minimap` - toggle the AccountPlayed minimap icon on/off
+- `/aplayed reset`   - reset the position of the minimap button to the bottom left of the minimap
+- `/apdebug`         - prints a list of all stored characters to chat in the following format: `Realm-Name: TimePlayed (CLASS)`
+
+**Deprecated** (will be removed in a future update):
+- `/apclasswin` - toggle class time window (use new API: `/aplayed show`)
+- `/apresetmap` - reset the position of the minimap button to the bottom left of the minimap (use new API: `/aplayed reset`)
 
 ### Quick-start:
 - Download the latest release here on github. extract the zip to your games addon folder.
