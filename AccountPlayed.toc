@@ -1,7 +1,7 @@
 ## Interface: 11508, 20505, 50503, 120000, 120001
 ## Version: 1.2.5
 ## Title: Account Played
-## Notes: get account /played and sort by class (/apclasswin OR minimap button)
+## Notes: get account /played and sort by class (/aplayed show OR minimap button)
 ## Author: Jeremy-Gstein
 ## SavedVariables: AccountPlayedDB, AccountPlayedMinimapDB, AccountPlayedPopupDB
 
