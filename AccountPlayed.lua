@@ -876,6 +876,13 @@ SlashCmdList.ACCOUNTPLAYED = function(input)
                 end
                 print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
             end
+        elseif AccountPlayedMinimapDB.hidden then
+            -- Button was never created because it was hidden on login — create it now
+            AccountPlayedMinimapDB.hidden = false
+            if AP.CreateMinimapButton then
+                AP.CreateMinimapButton()
+            end
+            print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
         end
     elseif input == "show" then
         AP.ToggleClassWindow()

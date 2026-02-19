@@ -280,7 +280,8 @@ local function CreateMinimapButton()
     UpdateButtonPosition(btn)
 end
 
--- Reset minimap button to default position and clear hidden state.
+-- Expose so AccountPlayed.lua can create the button on demand (e.g. /aplayed minimap to re-show after a hidden reload)
+AP.CreateMinimapButton = CreateMinimapButton
 -- Called by /aplayed reset (defined in AccountPlayed.lua).
 function AP.ResetMinimapButton()
     -- Reset to default position (bottom-left, 225 degrees)
