@@ -5,6 +5,7 @@
 -- 3. Cached constant values in drag handler
 -- 4. Added cleanup on hide
 -- Expected: 0% CPU when idle (down from 0.02-0.06%)
+-- `/apresetmap` is being depreciated in v2.0.0 Use new api: `/aplayed reset`
 
 local _, addonTable = ...
 local L = addonTable.L
@@ -75,7 +76,7 @@ end
 -- Creation of the Minimap button
 local function CreateMinimapButton()
     -- Don't create if hidden
-    if AccountPlayedMinimapDB.hide then
+    if AccountPlayedMinimapDB.hidden then
         return
     end
 
@@ -98,6 +99,9 @@ local function CreateMinimapButton()
 
     -- Tooltip, Click Handlers, and Fade on Hover
     btn:SetScript("OnEnter", function(self)
+        -- Don't show tooltip or fade in when the button is intentionally hidden
+        if AccountPlayedMinimapDB.hidden then return end
+
         -- Show tooltip
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
         GameTooltip:AddLine(L["TOOLTIP_TITLE"], 0.4, 0.78, 1)
@@ -113,7 +117,7 @@ local function CreateMinimapButton()
         GameTooltip:Show()
         
         -- Keep button visible when hovering over it
-        if self.snapped then
+        if self.snapped and not AccountPlayedMinimapDB.hidden then
             FadeButton(self, 1, 0.15)
         end
     end)
@@ -131,7 +135,7 @@ local function CreateMinimapButton()
     btn:SetScript("OnClick", function(self, button)
         if button == "LeftButton" then
             PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-            SlashCmdList.ACCOUNTPLAYEDPOPUP()
+            AP.ToggleClassWindow()
         elseif button == "RightButton" then
             AccountPlayedMinimapDB.locked = not AccountPlayedMinimapDB.locked
             PlaySound(AccountPlayedMinimapDB.locked and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
@@ -148,7 +152,7 @@ local function CreateMinimapButton()
 
     -- Hook Minimap's own mouse events instead of creating blocking overlay
     Minimap:HookScript("OnEnter", function()
-        if not btn.isDragging and btn.snapped then
+        if not btn.isDragging and btn.snapped and not AccountPlayedMinimapDB.hidden then
             FadeButton(btn, 1, 0.15)
         end
     end)
@@ -276,25 +280,38 @@ local function CreateMinimapButton()
     UpdateButtonPosition(btn)
 end
 
--- Slash command to reset button position
-SLASH_ACCOUNTPLAYEDRESETMAP1 = "/apresetmap"
-SlashCmdList.ACCOUNTPLAYEDRESETMAP = function()
+-- Expose so AccountPlayed.lua can create the button on demand (e.g. /aplayed minimap to re-show after a hidden reload)
+AP.CreateMinimapButton = CreateMinimapButton
+-- Called by /aplayed reset (defined in AccountPlayed.lua).
+function AP.ResetMinimapButton()
     -- Reset to default position (bottom-left, 225 degrees)
     local angle = math.rad(225)
     local radius = 105
     AccountPlayedMinimapDB.x = math.cos(angle) * radius
     AccountPlayedMinimapDB.y = math.sin(angle) * radius
-    
-    -- Update button if it exists
+
+    -- Clear hidden flag so the button becomes visible again
+    AccountPlayedMinimapDB.hidden = false
+
     local btn = _G[BUTTON_NAME]
     if btn then
-        btn.snapped = true  -- Reset snap state
+        btn.snapped = true
+        UIFrameFadeRemoveFrame(btn)  -- cancel any in-progress fade
+        btn:EnableMouse(true)
+        btn:Show()
+        btn:SetAlpha(0.01)  -- Snapped default: reveal on hover
         UpdateButtonPosition(btn)
-        FadeButton(btn, 1, 0.15)  -- Make it visible
         print("|cff00ff00Account Played:|r " .. L["MSG_RESET_SUCCESS"])
     else
         print("|cff00ff00Account Played:|r " .. L["MSG_RESET_NEXT"])
     end
+end
+
+-- Deprecated alias: /apresetmap  (kept for backwards compatibility)
+SLASH_ACCOUNTPLAYEDRESETMAP1 = "/apresetmap"
+SlashCmdList.ACCOUNTPLAYEDRESETMAP = function()
+    print("|cff00ff00Account Played:|r " .. L["MSG_CMD_DEPRECATED"])
+    AP.ResetMinimapButton()
 end
 
 -- Init
