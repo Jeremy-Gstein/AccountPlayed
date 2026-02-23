@@ -71,3 +71,4 @@ just build 1.0.0 "Commit Message for Tagged release"
 0.*.0 - New Supported Language/Locale
 0.0.* - Bug fixes, .toc updates, and small changes
 ```
+
