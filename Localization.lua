@@ -227,3 +227,61 @@ if GetLocale() == "frFR" then
     L["CHAR_PANEL_REMOVE_TIP"]  = "Supprimer de Account Played"
     L["CLICK_TO_PRINT"] = "Clic gauche pour afficher dans le chat"
 end
+
+if GetLocale() == "ruRU" then
+ -- Translator ZamestoTV   
+   L["ADDON_NAME"] = "Account Played"
+   L["WINDOW_TITLE"] = "Общее время - по классам"
+   L["NO_DATA"] = "Нет данных"
+   L["TOTAL"] = "ИТОГО: "
+   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Список персонажей:"
+   L["DB_CORRUPTED"] = "Account Played: Файл настроек поврежден, сброс!"
+   L["USE_YEARS_LABEL"] = "Года"
+   L["TIME_FORMAT_TITLE"] = "Формат времени"
+   L["TIME_FORMAT_YEARS"] = "Выбрано: Года/Дни"
+   L["TIME_FORMAT_HOURS"] = "Выбрано: Часы/Минуты"
+
+-- Minimap Button strings
+   L["TOOLTIP_TITLE"] = "Account Played"
+   L["TOOLTIP_LEFT_CLICK"] = "ЛКМ:"
+   L["TOOLTIP_RIGHT_CLICK"] = "ПКМ:"
+   L["TOOLTIP_TOGGLE_WINDOW"] = "Открыть/закрыть окно"
+   L["TOOLTIP_DRAG_MOVE"] = "Перетаскивание:"
+   L["TOOLTIP_MOVE_ICON"] = "Переместить иконку"
+   L["TOOLTIP_LOCK_UNLOCK"] = "Закрепить/открепить положение"
+
+   L["STATUS_LOCKED"] = "ЗАКРЕПЛЕНО"
+   L["STATUS_UNLOCKED"] = "НЕ ЗАКРЕПЛЕНО"
+
+   L["MSG_BUTTON_LOCKED"] = "Кнопка закреплена. ПКМ, чтобы открепить."
+   L["MSG_BUTTON_STATUS"] = "Кнопка у миникарты: %s"
+   L["MSG_RESET_SUCCESS"] = "Позиция кнопки сброшена."
+   L["MSG_RESET_NEXT"] = "Кнопка вернется в исходное положение при следующем входе."
+
+-- Slash command strings
+   L["MSG_MINIMAP_HIDDEN"]   = "Иконка скрыта. Введите /aplayed minimap, чтобы вернуть её."
+   L["MSG_MINIMAP_SHOWN"]    = "Иконка на миникарте отображена."
+   L["MSG_MINIMAP_NOT_INIT"] = "Кнопка миникарты еще не загружена."
+   L["CMD_HELP_HEADER"]      = "Доступные команды:"
+   L["CMD_HELP_MINIMAP_DESC"] = "включить/выключить иконку миникарты"
+   L["CMD_HELP_RESET_DESC"]   = "сбросить положение иконки и показать её"
+   L["CMD_HELP_SHOW_DESC"]    = "показать/скрыть окно времени по классам"
+   L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[УСТАРЕЛО]|r Команда /apclasswin будет удалена. Используйте |cffffff00/aplayed show|r."
+   L["MSG_CMD_DEPRECATED"]   = "|cffff4400[УСТАРЕЛО]|r Команда /apresetmap будет удалена. Используйте |cffffff00/aplayed reset|r."
+
+   L["TIME_UNIT_YEAR"] = "г."
+   L["TIME_UNIT_DAY"] = "д."
+   L["TIME_UNIT_HOUR"] = "ч."
+   L["TIME_UNIT_MINUTE"] = "м."
+
+-- Delete command strings
+   L["CMD_DELETE_USAGE"]     = "Использование: /apdelete Имя-Сервер"
+   L["CMD_DELETE_SUCCESS"]   = "Account Played: Персонаж '%s' удален."
+   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Персонаж '%s' не найден."
+   L["CMD_DELETE_CONFIRM"]   = "Вы уверены, что хотите удалить |cffffff00%s|r из базы данных?"
+
+-- Character management panel strings
+   L["CHAR_PANEL_RIGHT_CLICK"] = "ПКМ: управление персонажами"
+   L["CHAR_PANEL_REMOVE_TIP"]  = "Удалить из списка"
+   L["CLICK_TO_PRINT"] = "ЛКМ: вывести данные в чат"
+end
