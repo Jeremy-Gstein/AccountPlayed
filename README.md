@@ -50,6 +50,29 @@ HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing an
 - install `just` to run the repos `justfile` 
 - set PATHs to match local at the top of `justfile`
 
+**Localizing**:
+(Huge thanks to [SGSwdzgr](https://github.com/SGSwdzgr) for implimenting a framework for adding locales!!)
+- if using AI for translations please markup with: `-- (AI-GENERATED TRANSLATION)` 
+- if fixing a translation (or adding) markup with your github username: `-- (FIXED BY: Jeremy-Gstein)` (example)
+- supported languages/locales sourced from: [WoW's API](https://warcraft.wiki.gg/wiki/API_GetAvailableLocaleInfo)
+
+| Status        | Country                              | Language   | Code |
+|---------------|--------------------------------------|------------|------|
+| Not Completed | Brazil                               | Portuguese | ptBR |
+| Completed     | China                                | Chinese    | zhCN |
+| Completed     | France                               | French     | frFR |
+| Not Completed | Germany                              | German     | deDE |
+| Not Completed | Italy                                | Italian    | itIT |
+| Not Completed | Mexico                               | Spanish    | esMX |
+| Not Completed | Portugal                             | Portuguese | ptPT |
+| Not Completed | Republic of Korea                    | Korean     | koKR |
+| Completed     | Russia                               | Russian    | ruRU |
+| Not Completed | Spain                                | Spanish    | esES |
+| Completed     | Taiwan                               | Chinese    | zhTW |
+| Not Completed | Taiwan                               | English    | enTW |
+| Not Completed | Great Britain and Northern Ireland   | English    | enGB |
+| Completed     | United States of America             | English    | enUS |
+
 Examples:
 ```bash
 # Requires `just`
