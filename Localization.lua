@@ -345,3 +345,168 @@ if GetLocale() == "deDE" then
 	L["CHAR_PANEL_REMOVE_TIP"]  = "Aus Account Played entfernen"
 	L["CLICK_TO_PRINT"] = "Linksklick zum Ausgeben im Chat"
 end
+
+if GetLocale() == "esMX" then
+   L["ADDON_NAME"] = "Account Played"
+   L["WINDOW_TITLE"] = "Account Played  - Tiempo por Clase"
+   L["NO_DATA"] = "Sin información"
+   L["TOTAL"] = "TOTAL:"
+   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personajes conocidos:"
+   L["DB_CORRUPTED"] = "Account Played: SavedVariables corruptos, reiniciando!"
+   L["CLICK_TO_PRINT"] = "Click Izquierdo para imprimir en el chat"
+   L["USE_YEARS_LABEL"] = "Años"
+   L["TIME_FORMAT_TITLE"] = "Formato del Tiempo"
+   L["TIME_FORMAT_YEARS"] = "Marcar: Años/Días"
+   L["TIME_FORMAT_HOURS"] = "Desmarcar: Horas/Minutos"
+
+   L["TOOLTIP_TITLE"] = "Account Played"
+   L["TOOLTIP_LEFT_CLICK"] = "Click Izquierdo:"
+   L["TOOLTIP_RIGHT_CLICK"] = "Click derecho:"
+   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar ventana"
+   L["TOOLTIP_DRAG_MOVE"] = "Arrastrar:"
+   L["TOOLTIP_MOVE_ICON"] = "Mover Icono"
+   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posición"
+
+   L["STATUS_LOCKED"] = "BLOQUEADO"
+   L["STATUS_UNLOCKED"] = "DESBLOQUEADO"
+
+   L["MSG_BUTTON_LOCKED"] = "Botón está bloqueado. Click-Derecho para desbloquear"
+   L["MSG_BUTTON_STATUS"] = "Botón del minimapa %s"
+   L["MSG_RESET_SUCCESS"] = "Posición del botón del minimapa restablecida a la predeterminada."
+   L["MSG_RESET_NEXT"] = "El botón del minimapa aparecerá en la posición predeterminada en el próximo inicio de sesión."
+
+   -- Slash command strings
+   L["MSG_MINIMAP_HIDDEN"]    = "Icono del minimapa oculto. Usa /aplayed minimap para mostrarlo de nuevo."
+   L["MSG_MINIMAP_SHOWN"]     = "Icono del minimapa mostrado."
+   L["MSG_MINIMAP_NOT_INIT"]  = "El botón del minimapa aún no ha sido inicializado."
+   L["CMD_HELP_HEADER"]       = "comandos:"
+   L["CMD_HELP_MINIMAP_DESC"] = "activar/desactivar icono del minimapa"
+   L["CMD_HELP_RESET_DESC"]   = "Reestablecer icono a la posición predeterminada y mostrarlo"
+   L["CMD_HELP_SHOW_DESC"]    = "alternar ventana de tiempo por clase"
+   L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLETO]|r /apclasswin será eliminado en una futura actualización. Por favor usa |cffffff00/aplayed show|r en su lugar."
+   L["MSG_CMD_DEPRECATED"]    = "|cffff4400[OBSOLETO]|r /apresetmap será eliminado en una futura actualización. Por favor usa |cffffff00/aplayed reset|r en su lugar."
+
+   L["TIME_UNIT_YEAR"] = "a"
+   L["TIME_UNIT_DAY"] = "d"
+   L["TIME_UNIT_HOUR"] = "h"
+   L["TIME_UNIT_MINUTE"] = "m"
+
+   -- Delete command strings
+   L["CMD_DELETE_USAGE"]     = "Uso: /apdelete Personaje-Reino"
+   L["CMD_DELETE_SUCCESS"]   = "Account Played: Eliminó '%s' de la base de datos"
+   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Personaje '%s' no se encontró en la base de datos"
+   L["CMD_DELETE_CONFIRM"]   = "¿Estás seguro de que quieres quitar |cffffff00%s|r de Account Played?"
+
+   -- Character management panel strings
+   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
+   L["CHAR_PANEL_REMOVE_TIP"]  = "Quitar de Account Played"
+end
+
+if GetLocale() == "esES" then
+   L["ADDON_NAME"] = "Account Played"
+   L["WINDOW_TITLE"] = "Account Played  - Tiempo por Clase"
+   L["NO_DATA"] = "Sin información"
+   L["TOTAL"] = "TOTAL:"
+   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personajes conocidos:"
+   L["DB_CORRUPTED"] = "Account Played: SavedVariables corruptos, reiniciando!"
+   L["CLICK_TO_PRINT"] = "Click Izquierdo para imprimir en el chat"
+   L["USE_YEARS_LABEL"] = "Años"
+   L["TIME_FORMAT_TITLE"] = "Formato del Tiempo"
+   L["TIME_FORMAT_YEARS"] = "Marcar: Años/Días"
+   L["TIME_FORMAT_HOURS"] = "Desmarcar: Horas/Minutos"
+
+   L["TOOLTIP_TITLE"] = "Account Played"
+   L["TOOLTIP_LEFT_CLICK"] = "Click Izquierdo:"
+   L["TOOLTIP_RIGHT_CLICK"] = "Click derecho:"
+   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar ventana"
+   L["TOOLTIP_DRAG_MOVE"] = "Arrastrar:"
+   L["TOOLTIP_MOVE_ICON"] = "Mover Icono"
+   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posición"
+
+   L["STATUS_LOCKED"] = "BLOQUEADO"
+   L["STATUS_UNLOCKED"] = "DESBLOQUEADO"
+
+   L["MSG_BUTTON_LOCKED"] = "Botón está bloqueado. Click-Derecho para desbloquear"
+   L["MSG_BUTTON_STATUS"] = "Botón del minimapa %s"
+   L["MSG_RESET_SUCCESS"] = "Posición del botón del minimapa restablecida a la predeterminada."
+   L["MSG_RESET_NEXT"] = "El botón del minimapa aparecerá en la posición predeterminada en el próximo inicio de sesión."
+
+   -- Slash command strings
+   L["MSG_MINIMAP_HIDDEN"]    = "Icono del minimapa oculto. Usa /aplayed minimap para mostrarlo de nuevo."
+   L["MSG_MINIMAP_SHOWN"]     = "Icono del minimapa mostrado."
+   L["MSG_MINIMAP_NOT_INIT"]  = "El botón del minimapa aún no ha sido inicializado."
+   L["CMD_HELP_HEADER"]       = "comandos:"
+   L["CMD_HELP_MINIMAP_DESC"] = "activar/desactivar icono del minimapa"
+   L["CMD_HELP_RESET_DESC"]   = "Reestablecer icono a la posición predeterminada y mostrarlo"
+   L["CMD_HELP_SHOW_DESC"]    = "alternar ventana de tiempo por clase"
+   L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLETO]|r /apclasswin será eliminado en una futura actualización. Por favor usa |cffffff00/aplayed show|r en su lugar."
+   L["MSG_CMD_DEPRECATED"]    = "|cffff4400[OBSOLETO]|r /apresetmap será eliminado en una futura actualización. Por favor usa |cffffff00/aplayed reset|r en su lugar."
+
+   L["TIME_UNIT_YEAR"] = "a"
+   L["TIME_UNIT_DAY"] = "d"
+   L["TIME_UNIT_HOUR"] = "h"
+   L["TIME_UNIT_MINUTE"] = "m"
+
+   -- Delete command strings
+   L["CMD_DELETE_USAGE"]     = "Uso: /apdelete Personaje-Reino"
+   L["CMD_DELETE_SUCCESS"]   = "Account Played: Eliminó '%s' de la base de datos"
+   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Personaje '%s' no se encontró en la base de datos"
+   L["CMD_DELETE_CONFIRM"]   = "¿Estás seguro de que quieres quitar |cffffff00%s|r de Account Played?"
+
+   -- Character management panel strings
+   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
+   L["CHAR_PANEL_REMOVE_TIP"]  = "Quitar de Account Played"
+end
+
+if GetLocale() == "ptBR" then
+   L["ADDON_NAME"] = "Account Played"
+   L["WINDOW_TITLE"] = "Account Played - Tempo por Classe"
+   L["NO_DATA"] = "Sem informação"
+   L["TOTAL"] = "TOTAL:"
+   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personagens conhecidos:"
+   L["DB_CORRUPTED"] = "Account Played: SavedVariables corrompido, reiniciando!"
+   L["CLICK_TO_PRINT"] = "Clique Esquerdo para imprimir no chat"
+   L["USE_YEARS_LABEL"] = "Anos"
+   L["TIME_FORMAT_TITLE"] = "Formato de Tempo"
+   L["TIME_FORMAT_YEARS"] = "Marcado: Anos/Dias"
+   L["TIME_FORMAT_HOURS"] = "Desmarcado: Horas/Minutos"
+
+   L["TOOLTIP_TITLE"] = "Account Played"
+   L["TOOLTIP_LEFT_CLICK"] = "Clique Esquerdo:"
+   L["TOOLTIP_RIGHT_CLICK"] = "Clique Direito:"
+   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar janela"
+   L["TOOLTIP_DRAG_MOVE"] = "Arrastar:"
+   L["TOOLTIP_MOVE_ICON"] = "Mover Ícone"
+   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posição"
+
+   L["STATUS_LOCKED"] = "BLOQUEADO"
+   L["STATUS_UNLOCKED"] = "DESBLOQUEADO"
+
+   L["MSG_BUTTON_LOCKED"] = "Botão está bloqueado. Clique-Direito para desbloquear."
+   L["MSG_BUTTON_STATUS"] = "Botão do minimapa %s"
+   L["MSG_RESET_SUCCESS"] = "Posição do botão do minimapa redefinida para o padrão."
+   L["MSG_RESET_NEXT"] = "O botão do minimapa aparecerá na posição padrão no próximo login."
+
+   L["MSG_MINIMAP_HIDDEN"]    = "Ícone do minimapa oculto. Use /aplayed minimap para exibi-lo novamente."
+   L["MSG_MINIMAP_SHOWN"]     = "Ícone do minimapa exibido."
+   L["MSG_MINIMAP_NOT_INIT"]  = "O botão do minimapa ainda não foi inicializado."
+   L["CMD_HELP_HEADER"]       = "comandos:"
+   L["CMD_HELP_MINIMAP_DESC"] = "ativar/desativar ícone do minimapa"
+   L["CMD_HELP_RESET_DESC"]   = "Redefinir ícone para a posição padrão e exibi-lo"
+   L["CMD_HELP_SHOW_DESC"]    = "alternar janela de tempo por classe"
+   L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLETO]|r /apclasswin será removido em uma atualização futura. Por favor use |cffffff00/aplayed show|r em seu lugar."
+   L["MSG_CMD_DEPRECATED"]    = "|cffff4400[OBSOLETO]|r /apresetmap será removido em uma atualização futura. Por favor use |cffffff00/aplayed reset|r em seu lugar."
+
+   L["TIME_UNIT_YEAR"] = "a"
+   L["TIME_UNIT_DAY"] = "d"
+   L["TIME_UNIT_HOUR"] = "h"
+   L["TIME_UNIT_MINUTE"] = "m"
+
+   L["CMD_DELETE_USAGE"]     = "Uso: /apdelete Personagem-Reino"
+   L["CMD_DELETE_SUCCESS"]   = "Account Played: Removeu '%s' do banco de dados."
+   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Personagem '%s' não encontrado no banco de dados."
+   L["CMD_DELETE_CONFIRM"]   = "Tem certeza que deseja remover |cffffff00%s|r do Account Played?"
+
+   L["CHAR_PANEL_RIGHT_CLICK"] = "Clique-Direito para gerenciar personagens"
+   L["CHAR_PANEL_REMOVE_TIP"]  = "Remover do Account Played"
+end
