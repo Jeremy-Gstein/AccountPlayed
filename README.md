@@ -39,10 +39,11 @@ HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing an
 - Pip: Original idea to share time played and compare with other guildies.
 - Whare: WoW api help and debugging
 - [Amadeus](https://github.com/Amadeus-): Minimap fix to support all ui layouts, padding with class names, and better fomatting
-- [SGSwdzgr](https://github.com/SGSwdzgr): Added Localizatin Support for Simplified Chinese (zhCN) and Traditional Chinese (zhTW) and English (enUS)
+- [SGSwdzgr](https://github.com/SGSwdzgr): Added Localizatin Support & framework for Simplified Chinese (zhCN) and Traditional Chinese (zhTW), English (enUS), and a way for others to help localize.
 - [ZelionGG](https://github.com/Jeremy-Gstein/AccountPlayed/commits?author=ZelionGG): Added Localization for French locale (frFr)
-- [Hubbotu](https://github.com/Hubbotu) - Added Localization for Russian locale (ruRU)
+- [Hubbotu](https://github.com/Hubbotu) - Added Localization for Russian (ruRU)
 - [Smooth](https://github.com/Smooth26) - Added Localization for Spanish (esES), (esMX), and (ptBR)
+- [DaBear78](https://github.com/DaBear78) - Added Localization for German (deDE)
 - [WOWHEAD](https://www.wowhead.com/news/find-your-favorite-class-with-account-played-380300) - Huge thanks for promoting the addon!! seeing all the screenshots shared online is surreal to say the least.
 - [r/wow](https://www.reddit.com/r/wow/comments/1quo3h0/account_played_track_and_display_your_characters/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) - All the great feedback like missing documentation on slashcommands, bugs with missing minimap, and screenshots shared (:
 
