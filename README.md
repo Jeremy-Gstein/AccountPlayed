@@ -3,7 +3,9 @@ Simple WoW addon to track and display /played time. sorting by class across all 
 
 [![CurseForge Downloads](https://img.shields.io/curseforge/dt/1426046?style=for-the-badge&color=green)](https://www.curseforge.com/wow/addons/account-played)
 
-<img width="791" height="339" alt="image" src="https://github.com/user-attachments/assets/dda71859-7138-45f5-91b9-e8bc22eaa8cc" />
+<img width="757" height="414" alt="image" src="https://github.com/user-attachments/assets/b2f04b66-0b31-4f1d-86ac-ad13143e7fde" />
+<img width="264" height="136" alt="image" src="https://github.com/user-attachments/assets/6a516b04-c65a-4592-81b5-438e4cdd5819" />
+<img width="601" height="69" alt="image" src="https://github.com/user-attachments/assets/09c7e94e-9795-4dcd-80cb-798366d94677" />
 
 **Features:**
 - View your account's top played time by class
@@ -95,3 +97,4 @@ just build 1.0.0 "Commit Message for Tagged release"
 0.*.0 - New Supported Language/Locale
 0.0.* - Bug fixes, .toc updates, and small changes
 ```
+
