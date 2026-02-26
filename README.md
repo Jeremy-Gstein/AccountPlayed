@@ -42,6 +42,7 @@ HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing an
 - [SGSwdzgr](https://github.com/SGSwdzgr): Added Localizatin Support for Simplified Chinese (zhCN) and Traditional Chinese (zhTW) and English (enUS)
 - [ZelionGG](https://github.com/Jeremy-Gstein/AccountPlayed/commits?author=ZelionGG): Added Localization for French locale (frFr)
 - [Hubbotu](https://github.com/Hubbotu) - Added Localization for Russian locale (ruRU)
+- [Smooth](https://github.com/Smooth26) - Added Localization for Spanish (esES), (esMX), and (ptBR)
 - [WOWHEAD](https://www.wowhead.com/news/find-your-favorite-class-with-account-played-380300) - Huge thanks for promoting the addon!! seeing all the screenshots shared online is surreal to say the least.
 - [r/wow](https://www.reddit.com/r/wow/comments/1quo3h0/account_played_track_and_display_your_characters/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) - All the great feedback like missing documentation on slashcommands, bugs with missing minimap, and screenshots shared (:
 
@@ -60,21 +61,22 @@ HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing an
 
 | Status        | Country                              | Language   | Code |
 |---------------|--------------------------------------|------------|------|
-| Not Completed | Brazil                               | Portuguese | ptBR |
+| Completed     | Brazil                               | Portuguese | ptBR |
 | Completed     | China                                | Chinese    | zhCN |
 | Completed     | France                               | French     | frFR |
-| Not Completed | Germany                              | German     | deDE |
+| Completed     | Germany                              | German     | deDE |
+| Completed     | Russia                               | Russian    | ruRU |
+| Completed     | Spain                                | Spanish    | esES |
+| Completed     | Taiwan                               | Chinese    | zhTW |
+| Completed     | United States of America             | English    | enUS |
 | Not Completed | Italy                                | Italian    | itIT |
 | Not Completed | Mexico                               | Spanish    | esMX |
 | Not Completed | Portugal                             | Portuguese | ptPT |
 | Not Completed | Republic of Korea                    | Korean     | koKR |
-| Completed     | Russia                               | Russian    | ruRU |
-| Not Completed | Spain                                | Spanish    | esES |
-| Completed     | Taiwan                               | Chinese    | zhTW |
 | Not Completed | Taiwan                               | English    | enTW |
 | Not Completed | Great Britain and Northern Ireland   | English    | enGB |
-| Completed     | United States of America             | English    | enUS |
 
+---
 
 **Update and Version maintaining:**
 ```txt
@@ -95,7 +97,7 @@ just rm retail # remove addon from retail dir. (keeps local repo unchanged)
 just debug # print os, set PATHs, shasum of all files.
 ```
 
-Generate a Tagged Release to trigger ./.github/workflows/build.yml (packager action)
+Generate a Tagged Release to trigger .github/workflows/build.yml (packager action)
 ```bash
 # just build <tag> <commit>
 just build 1.0.0 "Commit Message for Tagged release"
