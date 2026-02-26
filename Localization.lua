@@ -285,3 +285,60 @@ if GetLocale() == "ruRU" then
    L["CHAR_PANEL_REMOVE_TIP"]  = "Удалить из списка"
    L["CLICK_TO_PRINT"] = "ЛКМ: вывести данные в чат"
 end
+
+if GetLocale() == "deDE" then
+	L["ADDON_NAME"] = "Account Played"
+	L["WINDOW_TITLE"] = "Account Played - Spielzeit nach Klasse"
+	L["NO_DATA"] = "Noch keine Daten"
+	L["TOTAL"] = "GESAMT: "
+	L["DEBUG_HEADER"] = "[AccountPlayed Debug] Bekannte Charaktere:"
+	L["DB_CORRUPTED"] = "Account Played: Gespeicherte Variablen beschädigt, setze zurück!"
+	L["USE_YEARS_LABEL"] = "Jahre"
+	L["TIME_FORMAT_TITLE"] = "Zeitformat"
+	L["TIME_FORMAT_YEARS"] = "Aktiviert: Jahre/Tage"
+	L["TIME_FORMAT_HOURS"] = "Deaktiviert: Stunden/Minuten"
+
+	-- Minimap-Button Texte
+	L["TOOLTIP_TITLE"] = "Account Played"
+	L["TOOLTIP_LEFT_CLICK"] = "Linksklick:"
+	L["TOOLTIP_RIGHT_CLICK"] = "Rechtsklick:"
+	L["TOOLTIP_TOGGLE_WINDOW"] = "Fenster ein-/ausblenden"
+	L["TOOLTIP_DRAG_MOVE"] = "Ziehen:"
+	L["TOOLTIP_MOVE_ICON"] = "Symbol verschieben"
+	L["TOOLTIP_LOCK_UNLOCK"] = "Position sperren/entsperren"
+
+	L["STATUS_LOCKED"] = "GESPERRT"
+	L["STATUS_UNLOCKED"] = "ENTSPERRT"
+
+	L["MSG_BUTTON_LOCKED"] = "Button ist gesperrt. Rechtsklick zum Entsperren."
+	L["MSG_BUTTON_STATUS"] = "Minimap-Button %s"
+	L["MSG_RESET_SUCCESS"] = "Position des Minimap-Buttons auf Standard zurückgesetzt."
+	L["MSG_RESET_NEXT"] = "Der Minimap-Button erscheint beim nächsten Login an der Standardposition."
+
+	-- Slash-Befehle Texte
+	L["MSG_MINIMAP_HIDDEN"]   = "Minimap-Symbol ausgeblendet. Mit /aplayed minimap wieder anzeigen."
+	L["MSG_MINIMAP_SHOWN"]    = "Minimap-Symbol angezeigt."
+	L["MSG_MINIMAP_NOT_INIT"] = "Minimap-Button noch nicht initialisiert."
+	L["CMD_HELP_HEADER"]      = "Befehle:"
+	L["CMD_HELP_MINIMAP_DESC"] = "Minimap-Symbol ein-/ausblenden"
+	L["CMD_HELP_RESET_DESC"]   = "Symbol auf Standardposition zurücksetzen und anzeigen"
+	L["CMD_HELP_SHOW_DESC"]    = "Klassen-Spielzeitfenster ein-/ausblenden"
+	L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[VERALTET]|r /apclasswin wird in einem zukünftigen Update entfernt. Bitte stattdessen |cffffff00/aplayed show|r verwenden."
+	L["MSG_CMD_DEPRECATED"]   = "|cffff4400[VERALTET]|r /apresetmap wird in einem zukünftigen Update entfernt. Bitte stattdessen |cffffff00/aplayed reset|r verwenden."
+
+	L["TIME_UNIT_YEAR"] = " J"
+	L["TIME_UNIT_DAY"] = " T"
+	L["TIME_UNIT_HOUR"] = " Std"
+	L["TIME_UNIT_MINUTE"] = " Min"
+
+	-- Löschbefehl Texte
+	L["CMD_DELETE_USAGE"]     = "Verwendung: /apdelete Charaktername-Servername"
+	L["CMD_DELETE_SUCCESS"]   = "Account Played: '%s' wurde aus der Datenbank entfernt."
+	L["CMD_DELETE_NOT_FOUND"] = "Account Played: Charakter '%s' wurde in der Datenbank nicht gefunden."
+	L["CMD_DELETE_CONFIRM"]   = "Möchtest du |cffffff00%s|r wirklich aus Account Played entfernen?"
+
+	-- Charakterverwaltungs-Panel Texte
+	L["CHAR_PANEL_RIGHT_CLICK"] = "Rechtsklick zur Charakterverwaltung"
+	L["CHAR_PANEL_REMOVE_TIP"]  = "Aus Account Played entfernen"
+	L["CLICK_TO_PRINT"] = "Linksklick zum Ausgeben im Chat"
+end
