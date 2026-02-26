@@ -60,6 +60,7 @@ L["CLICK_TO_PRINT"] = "Left-Click to print in chat"
 
 
 if GetLocale() == "zhCN" then
+  -- (Translator: https://github.com/SGSwdzgr)
     L["ADDON_NAME"] = "账号游戏时间"
     L["WINDOW_TITLE"] = "账号游戏时间 - 按职业统计"
     L["NO_DATA"] = "暂无数据"
@@ -116,6 +117,7 @@ if GetLocale() == "zhCN" then
 end
 
 if GetLocale() == "zhTW" then
+  -- (Translator: https://github.com/SGSwdzgr)
     L["ADDON_NAME"] = "帳號遊戲時間"
     L["WINDOW_TITLE"] = "帳號遊戲時間 - 按職業統計"
     L["NO_DATA"] = "暫無資料"
@@ -172,6 +174,7 @@ if GetLocale() == "zhTW" then
 end
 
 if GetLocale() == "frFR" then
+  -- Translator: https://github.com/ZelionGG
     L["ADDON_NAME"] = "Account Played"
     L["WINDOW_TITLE"] = "Account Played - Temps par Classe"
     L["NO_DATA"] = "Aucune donnée"
