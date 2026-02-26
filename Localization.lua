@@ -59,7 +59,7 @@ L["CHAR_PANEL_REMOVE_TIP"] = "Remove from Account Played"
 L["CLICK_TO_PRINT"] = "Left-Click to print in chat"
 
 
-if GetLocale() =  = "zhCN" then
+if GetLocale() == "zhCN" then
   -- (Translator: https://github.com/SGSwdzgr)
   L["ADDON_NAME"] = "账号游戏时间"
   L["WINDOW_TITLE"] = "账号游戏时间 - 按职业统计"
@@ -116,7 +116,7 @@ if GetLocale() =  = "zhCN" then
   L["CHAR_PANEL_REMOVE_TIP"] = "从 Account Played 中移除"
 end
 
-if GetLocale() =  = "zhTW" then
+if GetLocale() == "zhTW" then
   -- (Translator: https://github.com/SGSwdzgr)
   L["ADDON_NAME"] = "帳號遊戲時間"
   L["WINDOW_TITLE"] = "帳號遊戲時間 - 按職業統計"
@@ -173,7 +173,7 @@ if GetLocale() =  = "zhTW" then
   L["CHAR_PANEL_REMOVE_TIP"] = "從 Account Played 中移除" -- (AI-GENERATED TRANSLATION)
 end
 
-if GetLocale() =  = "frFR" then
+if GetLocale() == "frFR" then
   -- Translator: https://github.com/ZelionGG
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Temps par Classe"
@@ -231,7 +231,7 @@ if GetLocale() =  = "frFR" then
   L["CLICK_TO_PRINT"] = "Clic gauche pour afficher dans le chat"
 end
 
-if GetLocale() =  = "ruRU" then
+if GetLocale() == "ruRU" then
   -- Translator ZamestoTV   
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Общее время - по классам"
@@ -289,7 +289,7 @@ if GetLocale() =  = "ruRU" then
   L["CLICK_TO_PRINT"] = "ЛКМ: вывести данные в чат"
 end
 
-if GetLocale() =  = "deDE" then
+if GetLocale() == "deDE" then
   -- Translator: https://github.com/DaBear78
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Spielzeit nach Klasse"
@@ -347,7 +347,7 @@ if GetLocale() =  = "deDE" then
   L["CLICK_TO_PRINT"] = "Linksklick zum Ausgeben im Chat"
 end
 
-if GetLocale() =  = "esMX" then
+if GetLocale() == "esMX" then
   -- Translator: Smooth
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played  - Tiempo por Clase"
@@ -404,7 +404,7 @@ if GetLocale() =  = "esMX" then
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
 end
 
-if GetLocale() =  = "esES" then
+if GetLocale() == "esES" then
   -- Translator: Smooth
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played  - Tiempo por Clase"
@@ -461,7 +461,7 @@ if GetLocale() =  = "esES" then
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
 end
 
-if GetLocale() =  = "ptBR" then
+if GetLocale() == "ptBR" then
   -- Translator: Smooth
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Tempo por Classe"
