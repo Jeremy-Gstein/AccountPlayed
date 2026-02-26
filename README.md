@@ -75,7 +75,17 @@ HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing an
 | Not Completed | Great Britain and Northern Ireland   | English    | enGB |
 | Completed     | United States of America             | English    | enUS |
 
-Examples:
+
+**Update and Version maintaining:**
+```txt
+*.0.0 - Breaking changes or New Features
+0.*.0 - New Supported Language/Locale
+0.0.* - Bug fixes, .toc updates, and small changes
+```
+
+Examples with justfile:
+- install `just` to run the repos `justfile` 
+- set PATHs to match local at the top of `justfile`
 ```bash
 # Requires `just`
 just --list # print all commands
@@ -90,11 +100,3 @@ Generate a Tagged Release to trigger ./.github/workflows/build.yml (packager act
 # just build <tag> <commit>
 just build 1.0.0 "Commit Message for Tagged release"
 ```
-
-**Update and Version maintaining:**
-```txt
-*.0.0 - Breaking changes or New Features
-0.*.0 - New Supported Language/Locale
-0.0.* - Bug fixes, .toc updates, and small changes
-```
-
