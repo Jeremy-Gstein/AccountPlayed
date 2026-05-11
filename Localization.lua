@@ -58,6 +58,12 @@ L["CHAR_PANEL_RIGHT_CLICK"] = "Right-Click to manage characters"
 L["CHAR_PANEL_REMOVE_TIP"] = "Remove from Account Played"
 L["CLICK_TO_PRINT"] = "Left-Click to print in chat"
 
+-- Settings panel (keys only used when the equivalent Blizzard global is absent)
+L["SETTINGS_TEXT_SCALE"]  = "Text Scale"
+L["SETTINGS_SCALE_TIP"]   = "Adjust the size of text in the class list."
+L["SETTINGS_RESET"]       = "Reset"
+L["SETTINGS_RESET_TIP"]   = "Restore all settings to their defaults."
+
 
 if GetLocale() == "zhCN" then
   -- (Translator: https://github.com/SGSwdzgr)

@@ -16,4 +16,5 @@ Libs\LibDataBroker-1.1.lua
 Localization.lua
 AccountPlayed.lua
 MinimapButton.lua
+Settings.lua
 API.lua

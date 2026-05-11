@@ -473,7 +473,7 @@ local function CreateRow(parent, width, height)
 
     row.bar = CreateFrame("StatusBar", nil, row)
     row.bar:SetPoint("LEFT", row.classText, "RIGHT", 8, 0)
-    row.bar:SetPoint("RIGHT", row, "RIGHT", -140, 0) -- -20px
+    row.bar:SetPoint("RIGHT", row, "RIGHT", -148, 0)
     row.bar:SetHeight(height - 4)
     row.bar:SetMinMaxValues(0, 1)
     row.bar:SetValue(0)
@@ -484,9 +484,10 @@ local function CreateRow(parent, width, height)
     row.bar.bg:SetColorTexture(0, 0, 0, 0.4)
 
     row.valueText = row:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    row.valueText:SetPoint("LEFT", row.bar, "RIGHT", 8, 0)
-    row.valueText:SetWidth(170) -- +20px
+    row.valueText:SetPoint("LEFT", row.bar, "RIGHT", 6, 0)
+    row.valueText:SetPoint("RIGHT", row, "RIGHT", -6, 0)
     row.valueText:SetJustifyH("LEFT")
+    row.valueText:SetWordWrap(false)
 
     row:SetScript("OnEnter", function(self)
         self.highlight:Show()
@@ -571,7 +572,7 @@ local function CreatePopup()
     local START_W = AccountPlayedPopupDB.width or 540 -- +20px
     local START_H = AccountPlayedPopupDB.height or 300
     local MIN_W, MIN_H = 420, 200
-    local MAX_W, MAX_H = 720, 400
+    local MAX_W, MAX_H = 920, 400
 
     local f = CreateFrame("Frame", "AccountPlayedPopup", UIParent, "BackdropTemplate")
     f:SetSize(START_W, START_H)
@@ -761,8 +762,13 @@ local function CreatePopup()
                 row.classText:SetTextColor(color.r, color.g, color.b)
                 row.bar:SetValue(barPercent)
                 row.bar:SetStatusBarColor(color.r, color.g, color.b)
-                row.valueText:SetText(string.format("%5.1f%% - %s", percent * 100, 
-                    FormatTimeSmart(entry.time, AccountPlayedPopupDB.useYears)))
+                local scale = AccountPlayedPopupDB.textScale or 1.0
+                if scale > 1.5 then
+                  row.valueText:SetText(FormatTimeSmart(entry.time, AccountPlayedPopupDB.useYears))
+                else
+                  row.valueText:SetText(string.format("%5.1f%% - %s", percent * 100,
+                  FormatTimeSmart(entry.time, AccountPlayedPopupDB.useYears)))
+                end
                 row:Show()
             else
                 row.className = nil
