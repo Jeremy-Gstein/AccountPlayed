@@ -42,7 +42,7 @@ classic_path := if os == "unix" {
 }
 
 # ADDON FILES (.lua .toc etc..)
-files := "*.lua *.toc Libs/"
+files := "*.lua *.toc Libs/ *.blp"
 
 # just list available commands B)
 _default:

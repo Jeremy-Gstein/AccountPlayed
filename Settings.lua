@@ -103,8 +103,8 @@ local function CreateSettingsPanel()
 
     local p = CreateFrame("Frame", "AccountPlayedSettingsPanel", UIParent, "BackdropTemplate")
     p:SetSize(PANEL_W, PANEL_H)
-    p:SetFrameStrata("TOOLTIP")
-    p:SetFrameLevel(10)
+    p:SetFrameStrata("DIALOG")
+    p:SetFrameLevel(120)   -- above popup (100) and charPanel (110), below GameTooltip
     p:SetClampedToScreen(true)
 
     p:SetBackdrop({

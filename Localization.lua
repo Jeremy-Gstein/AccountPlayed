@@ -65,7 +65,7 @@ L["SETTINGS_RESET"]           = "Reset"
 L["SETTINGS_RESET_TIP"]       = "Restore all settings to their defaults."
 L["SETTINGS_PERCENT_ONLY"]    = "% Only"
 L["SETTINGS_PERCENT_ONLY_TIP"] = "Show only the percentage after each bar, hiding the time value."
-L["SETTINGS_DAYS_ONLY"]       = "Days Only"
+L["SETTINGS_DAYS_ONLY"]       = "Time Only"
 L["SETTINGS_DAYS_ONLY_TIP"]   = "Show only the time value after each bar, hiding the percentage."
 
 
