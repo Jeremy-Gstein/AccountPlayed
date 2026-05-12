@@ -1,5 +1,5 @@
 ## Interface: 11508, 20505, 50503, 120000, 120001, 120005
-## Version: 1.6.0-alpha
+## Version: 1.6.0
 ## Title: Account Played
 ## Notes: get account /played and sort by class (/aplayed show OR minimap button)
 ## Author: Jeremy-Gstein
