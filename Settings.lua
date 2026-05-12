@@ -7,8 +7,10 @@ local L = addonTable.L
 AccountPlayed = AccountPlayed or {}
 local AP = AccountPlayed
 
+-- valueMode: "both" | "days" | "percent"
 local SETTINGS_DEFAULTS = {
     textScale = 1.0,
+    valueMode = "both",
 }
 
 local function EnsureSettingsDefaults()
@@ -97,7 +99,7 @@ local function CreateSettingsPanel()
     EnsureSettingsDefaults()
 
     local PANEL_W = 220
-    local PANEL_H = 155
+    local PANEL_H = 180   -- extra row for Days / % checkboxes
 
     local p = CreateFrame("Frame", "AccountPlayedSettingsPanel", UIParent, "BackdropTemplate")
     p:SetSize(PANEL_W, PANEL_H)
@@ -149,7 +151,6 @@ local function CreateSettingsPanel()
     slider:SetMinMaxValues(1.0, 2.0)
     slider:SetValueStep(0.05)
     slider:SetObeyStepOnDrag(true)
-    slider:SetValue(AccountPlayedPopupDB.textScale or 1.0)
 
     _G[slider:GetName() .. "Low"]:SetText("100%")
     _G[slider:GetName() .. "High"]:SetText("200%")
@@ -159,14 +160,25 @@ local function CreateSettingsPanel()
         local v = slider:GetValue()
         scaleValueLabel:SetText(string.format("%d%%", math.floor(v * 100 + 0.5)))
     end
-    RefreshScaleLabel()
 
     slider:SetScript("OnValueChanged", function(self, value)
+        -- Guard: skip saves triggered by SetValue during initialization or re-sync,
+        -- so we never overwrite the persisted value with a default.
+        if self._initializing then
+            RefreshScaleLabel()
+            return
+        end
         AccountPlayedPopupDB.textScale = value
         RefreshScaleLabel()
         ApplyScaleToRows(value)
         PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
     end)
+
+    -- Set initial value without triggering a save
+    slider._initializing = true
+    slider:SetValue(AccountPlayedPopupDB.textScale or 1.0)
+    slider._initializing = false
+    RefreshScaleLabel()
 
     slider:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_TOP")
@@ -213,6 +225,77 @@ local function CreateSettingsPanel()
     end)
     mmCheck:SetScript("OnLeave", function() GameTooltip:Hide() end)
 
+    -- ── Row 2: Days only / % Only ──────────────────────────────────────────
+    yOff = yOff - 26
+
+    -- Helper: update both checkboxes and save the mode
+    local daysCheck, pctCheck   -- forward-declared so each OnClick can reference the other
+
+    local function SetValueMode(mode)
+        AccountPlayedPopupDB.valueMode = mode
+        daysCheck:SetChecked(mode == "days")
+        pctCheck:SetChecked(mode == "percent")
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        if AP.popupFrame and AP.popupFrame.UpdateDisplay then
+            AP.popupFrame:UpdateDisplay()
+        end
+    end
+
+    -- "Days only" checkbox (left side)
+    daysCheck = CreateFrame("CheckButton", nil, p, "UICheckButtonTemplate")
+    daysCheck:SetSize(24, 24)
+    daysCheck:SetPoint("TOPLEFT", p, "TOPLEFT", 10, yOff)
+    daysCheck:SetChecked((AccountPlayedPopupDB.valueMode or "both") == "days")
+
+    local daysLabel = daysCheck:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    daysLabel:SetPoint("LEFT", daysCheck, "RIGHT", 2, 0)
+    daysLabel:SetText(L["SETTINGS_DAYS_ONLY"])
+    daysLabel:SetTextColor(0.9, 0.9, 0.9)
+
+    daysCheck:SetScript("OnClick", function(self)
+        -- Clicking a checked box cycles back to "both"; clicking unchecked sets "days"
+        if not self:GetChecked() then
+            SetValueMode("both")
+        else
+            SetValueMode("days")
+        end
+    end)
+    daysCheck:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(L["SETTINGS_DAYS_ONLY_TIP"], 0.8, 0.8, 0.8, true)
+        GameTooltip:Show()
+    end)
+    daysCheck:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    -- "% Only" checkbox (right side of same row)
+    pctCheck = CreateFrame("CheckButton", nil, p, "UICheckButtonTemplate")
+    pctCheck:SetSize(24, 24)
+    pctCheck:SetPoint("TOPLEFT", p, "TOPLEFT", 118, yOff)
+    pctCheck:SetChecked((AccountPlayedPopupDB.valueMode or "both") == "percent")
+
+    local pctLabel = pctCheck:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    pctLabel:SetPoint("LEFT", pctCheck, "RIGHT", 2, 0)
+    pctLabel:SetText(L["SETTINGS_PERCENT_ONLY"])
+    pctLabel:SetTextColor(0.9, 0.9, 0.9)
+
+    pctCheck:SetScript("OnClick", function(self)
+        if not self:GetChecked() then
+            SetValueMode("both")
+        else
+            SetValueMode("percent")
+        end
+    end)
+    pctCheck:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(L["SETTINGS_PERCENT_ONLY_TIP"], 0.8, 0.8, 0.8, true)
+        GameTooltip:Show()
+    end)
+    pctCheck:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    -- Store references for re-sync on open and reset
+    p.daysCheck = daysCheck
+    p.pctCheck  = pctCheck
+
     local resetBtn = CreateFrame("Button", nil, p, "UIPanelButtonTemplate")
     resetBtn:SetSize(112, 22)
     resetBtn:SetPoint("BOTTOMLEFT", p, "BOTTOMLEFT", 12, 10)
@@ -221,8 +304,17 @@ local function CreateSettingsPanel()
         for k, v in pairs(SETTINGS_DEFAULTS) do
             AccountPlayedPopupDB[k] = v
         end
+        slider._initializing = true
         slider:SetValue(SETTINGS_DEFAULTS.textScale)
+        slider._initializing = false
+        RefreshScaleLabel()
         ApplyScaleToRows(SETTINGS_DEFAULTS.textScale)
+        -- Reset mode checkboxes (default = "both" → both unchecked)
+        daysCheck:SetChecked(SETTINGS_DEFAULTS.valueMode == "days")
+        pctCheck:SetChecked(SETTINGS_DEFAULTS.valueMode == "percent")
+        if AP.popupFrame and AP.popupFrame.UpdateDisplay then
+            AP.popupFrame:UpdateDisplay()
+        end
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     end)
     resetBtn:SetScript("OnEnter", function(self)
@@ -263,12 +355,9 @@ local function AttachGear(parentFrame)
     gear:SetFrameStrata("DIALOG")
     gear:SetFrameLevel(150)
 
-    -- Anchor over the popup title bar top-left
     gear:ClearAllPoints()
     gear:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 8, -7)
 
-    -- Use a solid colored square as a visible fallback icon, plus the real texture
-    -- The texture path uses single backslashes (Lua escape = one actual backslash)
     gear:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
     local nt = gear:GetNormalTexture()
     if nt then
@@ -282,8 +371,6 @@ local function AttachGear(parentFrame)
         ht:SetBlendMode("ADD")
     end
 
-    -- Show/hide gear in lockstep with the popup
-    -- Show immediately if popup is already visible
     if parentFrame:IsShown() then
         gear:Show()
     else
@@ -323,12 +410,24 @@ local function AttachGear(parentFrame)
             PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE)
             panel:Hide()
         else
-            -- Sync minimap checkbox
+            -- Sync minimap checkbox to current hidden state
             for _, child in next, { panel:GetChildren() } do
                 if child.GetChecked then
                     child:SetChecked(not AccountPlayedMinimapDB.hidden)
                 end
             end
+            -- Re-sync slider to the current saved value without triggering
+            -- OnValueChanged (which would write back and defeat the purpose).
+            local s = _G["AccountPlayedTextScaleSlider"]
+            if s then
+                s._initializing = true
+                s:SetValue(AccountPlayedPopupDB.textScale or 1.0)
+                s._initializing = false
+            end
+            -- Re-sync the Days / % checkboxes
+            local mode = AccountPlayedPopupDB.valueMode or "both"
+            if panel.daysCheck then panel.daysCheck:SetChecked(mode == "days")    end
+            if panel.pctCheck  then panel.pctCheck:SetChecked(mode == "percent")  end
             panel:ClearAllPoints()
             panel:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 4, -30)
             PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)

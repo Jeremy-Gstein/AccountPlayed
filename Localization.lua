@@ -59,10 +59,14 @@ L["CHAR_PANEL_REMOVE_TIP"] = "Remove from Account Played"
 L["CLICK_TO_PRINT"] = "Left-Click to print in chat"
 
 -- Settings panel (keys only used when the equivalent Blizzard global is absent)
-L["SETTINGS_TEXT_SCALE"]  = "Text Scale"
-L["SETTINGS_SCALE_TIP"]   = "Adjust the size of text in the class list."
-L["SETTINGS_RESET"]       = "Reset"
-L["SETTINGS_RESET_TIP"]   = "Restore all settings to their defaults."
+L["SETTINGS_TEXT_SCALE"]      = "Text Scale"
+L["SETTINGS_SCALE_TIP"]       = "Adjust the size of text in the class list."
+L["SETTINGS_RESET"]           = "Reset"
+L["SETTINGS_RESET_TIP"]       = "Restore all settings to their defaults."
+L["SETTINGS_PERCENT_ONLY"]    = "% Only"
+L["SETTINGS_PERCENT_ONLY_TIP"] = "Show only the percentage after each bar, hiding the time value."
+L["SETTINGS_DAYS_ONLY"]       = "Days Only"
+L["SETTINGS_DAYS_ONLY_TIP"]   = "Show only the time value after each bar, hiding the percentage."
 
 
 if GetLocale() == "zhCN" then
@@ -95,31 +99,32 @@ if GetLocale() == "zhCN" then
   L["MSG_RESET_SUCCESS"] = "小地图图标位置已重置为默认。"
   L["MSG_RESET_NEXT"] = "小地图图标将在下次登录时出现在默认位置。"
 
-  -- Slash command strings
-  L["MSG_MINIMAP_HIDDEN"] = "小地图图标已隐藏。使用 /aplayed minimap 重新显示。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_SHOWN"] = "小地图图标已显示。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_NOT_INIT"] = "小地图按钮尚未初始化。" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_HEADER"] = "命令：" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_MINIMAP_DESC"] = "切换小地图图标显示/隐藏" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_RESET_DESC"] = "重置图标到默认位置并显示" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_SHOW_DESC"] = "切换职业时间窗口" -- (AI-GENERATED TRANSLATION)
-  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已弃用]|r /apclasswin 将在未来版本中移除。请改用 |cffffff00/aplayed show|r。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_CMD_DEPRECATED"] = "|cffff4400[已弃用]|r /apresetmap 将在未来版本中移除。请改用 |cffffff00/aplayed reset|r。" -- (AI-GENERATED TRANSLATION)
+  L["MSG_MINIMAP_HIDDEN"] = "小地图图标已隐藏。使用 /aplayed minimap 重新显示。"
+  L["MSG_MINIMAP_SHOWN"] = "小地图图标已显示。"
+  L["MSG_MINIMAP_NOT_INIT"] = "小地图按钮尚未初始化。"
+  L["CMD_HELP_HEADER"] = "命令："
+  L["CMD_HELP_MINIMAP_DESC"] = "切换小地图图标显示/隐藏"
+  L["CMD_HELP_RESET_DESC"] = "重置图标到默认位置并显示"
+  L["CMD_HELP_SHOW_DESC"] = "切换职业时间窗口"
+  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已弃用]|r /apclasswin 将在未来版本中移除。请改用 |cffffff00/aplayed show|r。"
+  L["MSG_CMD_DEPRECATED"] = "|cffff4400[已弃用]|r /apresetmap 将在未来版本中移除。请改用 |cffffff00/aplayed reset|r。"
 
   L["TIME_UNIT_YEAR"] = "年"
   L["TIME_UNIT_DAY"] = "天"
   L["TIME_UNIT_HOUR"] = "小时"
   L["TIME_UNIT_MINUTE"] = "分钟"
 
-  -- Delete command strings
   L["CMD_DELETE_USAGE"] = "用法: /apdelete 角色名-服务器名"
   L["CMD_DELETE_SUCCESS"] = "Account Played: 已从数据库中移除 '%s'。"
   L["CMD_DELETE_NOT_FOUND"] = "Account Played: 数据库中未找到角色 '%s'。"
   L["CMD_DELETE_CONFIRM"] = "确定要从 Account Played 中移除 |cffffff00%s|r 吗？"
 
-  -- Character management panel strings
   L["CHAR_PANEL_RIGHT_CLICK"] = "右键点击管理角色"
   L["CHAR_PANEL_REMOVE_TIP"] = "从 Account Played 中移除"
+  L["SETTINGS_PERCENT_ONLY"]     = "仅%"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "每个进度条后仅显示百分比，不显示时间。"
+  L["SETTINGS_DAYS_ONLY"]       = "仅天数"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "每个进度条后仅显示时间，不显示百分比。"
 end
 
 if GetLocale() == "zhTW" then
@@ -152,31 +157,32 @@ if GetLocale() == "zhTW" then
   L["MSG_RESET_SUCCESS"] = "小地圖圖示位置已重置為默認。"
   L["MSG_RESET_NEXT"] = "小地圖圖示將在下次登錄時出現在默認位置。"
 
-  -- Slash command strings
-  L["MSG_MINIMAP_HIDDEN"] = "小地圖圖示已隱藏。使用 /aplayed minimap 重新顯示。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_SHOWN"] = "小地圖圖示已顯示。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_NOT_INIT"] = "小地圖按鈕尚未初始化。" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_HEADER"] = "命令：" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_MINIMAP_DESC"] = "切換小地圖圖示顯示/隱藏" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_RESET_DESC"] = "重置圖示到默認位置並顯示" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_SHOW_DESC"] = "切換職業時間視窗" -- (AI-GENERATED TRANSLATION)
-  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已棄用]|r /apclasswin 將在未來版本中移除。請改用 |cffffff00/aplayed show|r。" -- (AI-GENERATED TRANSLATION)
-  L["MSG_CMD_DEPRECATED"] = "|cffff4400[已棄用]|r /apresetmap 將在未來版本中移除。請改用 |cffffff00/aplayed reset|r。" -- (AI-GENERATED TRANSLATION)
+  L["MSG_MINIMAP_HIDDEN"] = "小地圖圖示已隱藏。使用 /aplayed minimap 重新顯示。"
+  L["MSG_MINIMAP_SHOWN"] = "小地圖圖示已顯示。"
+  L["MSG_MINIMAP_NOT_INIT"] = "小地圖按鈕尚未初始化。"
+  L["CMD_HELP_HEADER"] = "命令："
+  L["CMD_HELP_MINIMAP_DESC"] = "切換小地圖圖示顯示/隱藏"
+  L["CMD_HELP_RESET_DESC"] = "重置圖示到默認位置並顯示"
+  L["CMD_HELP_SHOW_DESC"] = "切換職業時間視窗"
+  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[已棄用]|r /apclasswin 將在未來版本中移除。請改用 |cffffff00/aplayed show|r。"
+  L["MSG_CMD_DEPRECATED"] = "|cffff4400[已棄用]|r /apresetmap 將在未來版本中移除。請改用 |cffffff00/aplayed reset|r。"
 
   L["TIME_UNIT_YEAR"] = "年"
   L["TIME_UNIT_DAY"] = "天"
   L["TIME_UNIT_HOUR"] = "小時"
   L["TIME_UNIT_MINUTE"] = "分鐘"
 
-  -- Delete command strings
-  L["CMD_DELETE_USAGE"] = "用法: /apdelete 角色名-伺服器名" -- (AI-GENERATED TRANSLATION)
-  L["CMD_DELETE_SUCCESS"] = "Account Played: 已從資料庫中移除 '%s'。" -- (AI-GENERATED TRANSLATION)
-  L["CMD_DELETE_NOT_FOUND"] = "Account Played: 資料庫中未找到角色 '%s'。" -- (AI-GENERATED TRANSLATION)
-  L["CMD_DELETE_CONFIRM"] = "確定要從 Account Played 中移除 |cffffff00%s|r 嗎？" -- (AI-GENERATED TRANSLATION)
+  L["CMD_DELETE_USAGE"] = "用法: /apdelete 角色名-伺服器名"
+  L["CMD_DELETE_SUCCESS"] = "Account Played: 已從資料庫中移除 '%s'。"
+  L["CMD_DELETE_NOT_FOUND"] = "Account Played: 資料庫中未找到角色 '%s'。"
+  L["CMD_DELETE_CONFIRM"] = "確定要從 Account Played 中移除 |cffffff00%s|r 嗎？"
 
-  -- Character management panel strings
-  L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色" -- (AI-GENERATED TRANSLATION)
-  L["CHAR_PANEL_REMOVE_TIP"] = "從 Account Played 中移除" -- (AI-GENERATED TRANSLATION)
+  L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色"
+  L["CHAR_PANEL_REMOVE_TIP"] = "從 Account Played 中移除"
+  L["SETTINGS_PERCENT_ONLY"]     = "僅%"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "每個進度條後僅顯示百分比，不顯示時間。"
+  L["SETTINGS_DAYS_ONLY"]       = "僅天數"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "每個進度條後僅顯示時間，不顯示百分比。"
 end
 
 if GetLocale() == "frFR" then
@@ -192,7 +198,6 @@ if GetLocale() == "frFR" then
   L["TIME_FORMAT_YEARS"] = "Coché: Années/Jours"
   L["TIME_FORMAT_HOURS"] = "Non coché: Heures/Minutes"
 
-  -- Minimap Button strings
   L["TOOLTIP_TITLE"] = "Account Played"
   L["TOOLTIP_LEFT_CLICK"] = "Clic gauche :"
   L["TOOLTIP_RIGHT_CLICK"] = "Clic droit :"
@@ -209,36 +214,37 @@ if GetLocale() == "frFR" then
   L["MSG_RESET_SUCCESS"] = "Position du bouton de la minicarte réinitialisée à la valeur par défaut."
   L["MSG_RESET_NEXT"] = "Le bouton de la minicarte apparaîtra à la position par défaut lors du prochain login."
 
-  -- Slash command strings
-  L["MSG_MINIMAP_HIDDEN"] = "Icône de la minicarte masquée. Utilisez /aplayed minimap pour la réafficher." -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_SHOWN"] = "Icône de la minicarte affichée." -- (AI-GENERATED TRANSLATION)
-  L["MSG_MINIMAP_NOT_INIT"] = "Le bouton de la minicarte n'est pas encore initialisé." -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_HEADER"] = "commandes :" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_MINIMAP_DESC"] = "afficher/masquer l'icône de la minicarte" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_RESET_DESC"] = "réinitialiser l'icône à sa position par défaut et l'afficher" -- (AI-GENERATED TRANSLATION)
-  L["CMD_HELP_SHOW_DESC"] = "afficher/masquer la fenêtre des temps par classe" -- (AI-GENERATED TRANSLATION)
-  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLÈTE]|r /apclasswin sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed show|r à la place." -- (AI-GENERATED TRANSLATION)
-  L["MSG_CMD_DEPRECATED"] = "|cffff4400[OBSOLÈTE]|r /apresetmap sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed reset|r à la place." -- (AI-GENERATED TRANSLATION)
+  L["MSG_MINIMAP_HIDDEN"] = "Icône de la minicarte masquée. Utilisez /aplayed minimap pour la réafficher."
+  L["MSG_MINIMAP_SHOWN"] = "Icône de la minicarte affichée."
+  L["MSG_MINIMAP_NOT_INIT"] = "Le bouton de la minicarte n'est pas encore initialisé."
+  L["CMD_HELP_HEADER"] = "commandes :"
+  L["CMD_HELP_MINIMAP_DESC"] = "afficher/masquer l'icône de la minicarte"
+  L["CMD_HELP_RESET_DESC"] = "réinitialiser l'icône à sa position par défaut et l'afficher"
+  L["CMD_HELP_SHOW_DESC"] = "afficher/masquer la fenêtre des temps par classe"
+  L["MSG_CLASSWIN_DEPRECATED"] = "|cffff4400[OBSOLÈTE]|r /apclasswin sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed show|r à la place."
+  L["MSG_CMD_DEPRECATED"] = "|cffff4400[OBSOLÈTE]|r /apresetmap sera supprimé dans une future mise à jour. Veuillez utiliser |cffffff00/aplayed reset|r à la place."
 
   L["TIME_UNIT_YEAR"] = "a"
   L["TIME_UNIT_DAY"] = "j"
   L["TIME_UNIT_HOUR"] = "h"
   L["TIME_UNIT_MINUTE"] = "m"
 
-  -- Delete command strings
   L["CMD_DELETE_USAGE"] = "Utilisation : /apdelete NomPersonnage-NomServeur"
   L["CMD_DELETE_SUCCESS"] = "Account Played : '%s' supprimé de la base de données."
   L["CMD_DELETE_NOT_FOUND"] = "Account Played : Personnage '%s' non trouvé dans la base de données."
   L["CMD_DELETE_CONFIRM"] = "Êtes-vous sûr de vouloir supprimer |cffffff00%s|r de Account Played?"
 
-  -- Character management panel strings
   L["CHAR_PANEL_RIGHT_CLICK"] = "Clic droit pour gérer les personnages"
   L["CHAR_PANEL_REMOVE_TIP"] = "Supprimer de Account Played"
   L["CLICK_TO_PRINT"] = "Clic gauche pour afficher dans le chat"
+  L["SETTINGS_PERCENT_ONLY"]     = "% Seul."
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Afficher uniquement le pourcentage après chaque barre, sans la valeur de temps."
+  L["SETTINGS_DAYS_ONLY"]       = "Jours seul."
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Afficher uniquement la valeur de temps après chaque barre, sans le pourcentage."
 end
 
 if GetLocale() == "ruRU" then
-  -- Translator ZamestoTV   
+  -- Translator ZamestoTV
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Общее время - по классам"
   L["NO_DATA"] = "Нет данных"
@@ -250,7 +256,6 @@ if GetLocale() == "ruRU" then
   L["TIME_FORMAT_YEARS"] = "Выбрано: Года/Дни"
   L["TIME_FORMAT_HOURS"] = "Выбрано: Часы/Минуты"
 
-  -- Minimap Button strings
   L["TOOLTIP_TITLE"] = "Account Played"
   L["TOOLTIP_LEFT_CLICK"] = "ЛКМ:"
   L["TOOLTIP_RIGHT_CLICK"] = "ПКМ:"
@@ -267,7 +272,6 @@ if GetLocale() == "ruRU" then
   L["MSG_RESET_SUCCESS"] = "Позиция кнопки сброшена."
   L["MSG_RESET_NEXT"] = "Кнопка вернется в исходное положение при следующем входе."
 
-  -- Slash command strings
   L["MSG_MINIMAP_HIDDEN"] = "Иконка скрыта. Введите /aplayed minimap, чтобы вернуть её."
   L["MSG_MINIMAP_SHOWN"] = "Иконка на миникарте отображена."
   L["MSG_MINIMAP_NOT_INIT"] = "Кнопка миникарты еще не загружена."
@@ -283,16 +287,18 @@ if GetLocale() == "ruRU" then
   L["TIME_UNIT_HOUR"] = "ч."
   L["TIME_UNIT_MINUTE"] = "м."
 
-  -- Delete command strings
   L["CMD_DELETE_USAGE"] = "Использование: /apdelete Имя-Сервер"
   L["CMD_DELETE_SUCCESS"] = "Account Played: Персонаж '%s' удален."
   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Персонаж '%s' не найден."
   L["CMD_DELETE_CONFIRM"] = "Вы уверены, что хотите удалить |cffffff00%s|r из базы данных?"
 
-  -- Character management panel strings
   L["CHAR_PANEL_RIGHT_CLICK"] = "ПКМ: управление персонажами"
   L["CHAR_PANEL_REMOVE_TIP"] = "Удалить из списка"
   L["CLICK_TO_PRINT"] = "ЛКМ: вывести данные в чат"
+  L["SETTINGS_PERCENT_ONLY"]     = "Только %"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Показывать только процент после каждой полосы, без значения времени."
+  L["SETTINGS_DAYS_ONLY"]       = "Только дни"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Показывать только значение времени после каждой полосы, без процента."
 end
 
 if GetLocale() == "deDE" then
@@ -308,7 +314,6 @@ if GetLocale() == "deDE" then
   L["TIME_FORMAT_YEARS"] = "Aktiviert: Jahre/Tage"
   L["TIME_FORMAT_HOURS"] = "Deaktiviert: Stunden/Minuten"
 
-  -- Minimap-Button Texte
   L["TOOLTIP_TITLE"] = "Account Played"
   L["TOOLTIP_LEFT_CLICK"] = "Linksklick:"
   L["TOOLTIP_RIGHT_CLICK"] = "Rechtsklick:"
@@ -325,7 +330,6 @@ if GetLocale() == "deDE" then
   L["MSG_RESET_SUCCESS"] = "Position des Minimap-Buttons auf Standard zurückgesetzt."
   L["MSG_RESET_NEXT"] = "Der Minimap-Button erscheint beim nächsten Login an der Standardposition."
 
-  -- Slash-Befehle Texte
   L["MSG_MINIMAP_HIDDEN"] = "Minimap-Symbol ausgeblendet. Mit /aplayed minimap wieder anzeigen."
   L["MSG_MINIMAP_SHOWN"] = "Minimap-Symbol angezeigt."
   L["MSG_MINIMAP_NOT_INIT"] = "Minimap-Button noch nicht initialisiert."
@@ -341,16 +345,18 @@ if GetLocale() == "deDE" then
   L["TIME_UNIT_HOUR"] = " Std"
   L["TIME_UNIT_MINUTE"] = " Min"
 
-  -- Löschbefehl Texte
   L["CMD_DELETE_USAGE"] = "Verwendung: /apdelete Charaktername-Servername"
   L["CMD_DELETE_SUCCESS"] = "Account Played: '%s' wurde aus der Datenbank entfernt."
   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Charakter '%s' wurde in der Datenbank nicht gefunden."
   L["CMD_DELETE_CONFIRM"] = "Möchtest du |cffffff00%s|r wirklich aus Account Played entfernen?"
 
-  -- Charakterverwaltungs-Panel Texte
   L["CHAR_PANEL_RIGHT_CLICK"] = "Rechtsklick zur Charakterverwaltung"
   L["CHAR_PANEL_REMOVE_TIP"] = "Aus Account Played entfernen"
   L["CLICK_TO_PRINT"] = "Linksklick zum Ausgeben im Chat"
+  L["SETTINGS_PERCENT_ONLY"]     = "Nur %"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Nur den Prozentsatz nach jeder Leiste anzeigen, ohne den Zeitwert."
+  L["SETTINGS_DAYS_ONLY"]       = "Nur Tage"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Nur den Zeitwert nach jeder Leiste anzeigen, ohne den Prozentsatz."
 end
 
 if GetLocale() == "esMX" then
@@ -383,7 +389,6 @@ if GetLocale() == "esMX" then
   L["MSG_RESET_SUCCESS"] = "Posición del botón del minimapa restablecida a la predeterminada."
   L["MSG_RESET_NEXT"] = "El botón del minimapa aparecerá en la posición predeterminada en el próximo inicio de sesión."
 
-  -- Slash command strings
   L["MSG_MINIMAP_HIDDEN"] = "Icono del minimapa oculto. Usa /aplayed minimap para mostrarlo de nuevo."
   L["MSG_MINIMAP_SHOWN"] = "Icono del minimapa mostrado."
   L["MSG_MINIMAP_NOT_INIT"] = "El botón del minimapa aún no ha sido inicializado."
@@ -399,15 +404,17 @@ if GetLocale() == "esMX" then
   L["TIME_UNIT_HOUR"] = "h"
   L["TIME_UNIT_MINUTE"] = "m"
 
-  -- Delete command strings
   L["CMD_DELETE_USAGE"] = "Uso: /apdelete Personaje-Reino"
   L["CMD_DELETE_SUCCESS"] = "Account Played: Eliminó '%s' de la base de datos"
   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Personaje '%s' no se encontró en la base de datos"
   L["CMD_DELETE_CONFIRM"] = "¿Estás seguro de que quieres quitar |cffffff00%s|r de Account Played?"
 
-  -- Character management panel strings
   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
+  L["SETTINGS_PERCENT_ONLY"]     = "Solo %"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar solo el porcentaje tras cada barra, sin el valor de tiempo."
+  L["SETTINGS_DAYS_ONLY"]       = "Solo días"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Mostrar solo el valor de tiempo tras cada barra, sin el porcentaje."
 end
 
 if GetLocale() == "esES" then
@@ -440,7 +447,6 @@ if GetLocale() == "esES" then
   L["MSG_RESET_SUCCESS"] = "Posición del botón del minimapa restablecida a la predeterminada."
   L["MSG_RESET_NEXT"] = "El botón del minimapa aparecerá en la posición predeterminada en el próximo inicio de sesión."
 
-  -- Slash command strings
   L["MSG_MINIMAP_HIDDEN"] = "Icono del minimapa oculto. Usa /aplayed minimap para mostrarlo de nuevo."
   L["MSG_MINIMAP_SHOWN"] = "Icono del minimapa mostrado."
   L["MSG_MINIMAP_NOT_INIT"] = "El botón del minimapa aún no ha sido inicializado."
@@ -456,15 +462,17 @@ if GetLocale() == "esES" then
   L["TIME_UNIT_HOUR"] = "h"
   L["TIME_UNIT_MINUTE"] = "m"
 
-  -- Delete command strings
   L["CMD_DELETE_USAGE"] = "Uso: /apdelete Personaje-Reino"
   L["CMD_DELETE_SUCCESS"] = "Account Played: Eliminó '%s' de la base de datos"
   L["CMD_DELETE_NOT_FOUND"] = "Account Played: Personaje '%s' no se encontró en la base de datos"
   L["CMD_DELETE_CONFIRM"] = "¿Estás seguro de que quieres quitar |cffffff00%s|r de Account Played?"
 
-  -- Character management panel strings
   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
+  L["SETTINGS_PERCENT_ONLY"]     = "Solo %"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar solo el porcentaje tras cada barra, sin el valor de tiempo."
+  L["SETTINGS_DAYS_ONLY"]       = "Solo días"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Mostrar solo el valor de tiempo tras cada barra, sin el porcentaje."
 end
 
 if GetLocale() == "ptBR" then
@@ -519,4 +527,8 @@ if GetLocale() == "ptBR" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Clique-Direito para gerenciar personagens"
   L["CHAR_PANEL_REMOVE_TIP"] = "Remover do Account Played"
+  L["SETTINGS_PERCENT_ONLY"]     = "Só %"
+  L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar apenas a porcentagem após cada barra, sem o valor de tempo."
+  L["SETTINGS_DAYS_ONLY"]       = "Só dias"
+  L["SETTINGS_DAYS_ONLY_TIP"]   = "Mostrar apenas o valor de tempo após cada barra, sem a porcentagem."
 end
