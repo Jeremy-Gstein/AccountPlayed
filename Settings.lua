@@ -484,6 +484,11 @@ local function HookPopupShow()
         EnsureSettingsDefaults()
         ApplyScaleToRows(AccountPlayedPopupDB.textScale or 1.0)
     end)
+
+    -- Apply immediately in case the frame is already shown on this first open,
+    -- since OnShow has already fired before this hook was attached.
+    EnsureSettingsDefaults()
+    ApplyScaleToRows(AccountPlayedPopupDB.textScale or 1.0)
 end
 
 C_Timer.After(0, function()
