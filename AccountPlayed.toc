@@ -19,3 +19,4 @@ AccountPlayed.lua
 MinimapButton.lua
 Settings.lua
 API.lua
+
