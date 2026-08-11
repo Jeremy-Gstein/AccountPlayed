@@ -1,4 +1,4 @@
-## Interface: 11508, 20505, 50503, 120001, 120005, 120007
+## Interface: 11508, 20505, 50503, 120005, 120007, 120100
 ## Version: @project-version@
 ## Title: Account Played
 ## Notes: get account /played and sort by class (/aplayed show OR minimap button)
