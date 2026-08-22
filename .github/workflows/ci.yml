@@ -1,0 +1,37 @@
+name: Lua CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Lua 5.1 validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install Lua 5.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes lua5.1
+
+      - name: Parse every Lua file
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type f -name '*.lua' -not -path './.git/*' -print0 \
+            | xargs -0 -n 1 luac5.1 -p
+
+      - name: Run integration tests
+        run: lua5.1 tests/run.lua

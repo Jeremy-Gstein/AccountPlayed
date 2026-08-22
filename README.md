@@ -1,105 +1,138 @@
 # AccountPlayed
-Simple WoW addon to track and display /played time. sorting by class across all realms.
+
+AccountPlayed is a World of Warcraft add-on that records each character's
+`/played` response and turns the locally collected data into an account-wide
+play-time overview.
 
 [![CurseForge Downloads](https://img.shields.io/curseforge/dt/1426046?style=for-the-badge&color=green)](https://www.curseforge.com/wow/addons/account-played)
 
-<img width="757" height="414" alt="image" src="https://github.com/user-attachments/assets/b2f04b66-0b31-4f1d-86ac-ad13143e7fde" />
-<img width="264" height="136" alt="image" src="https://github.com/user-attachments/assets/6a516b04-c65a-4592-81b5-438e4cdd5819" />
-<img width="601" height="69" alt="image" src="https://github.com/user-attachments/assets/09c7e94e-9795-4dcd-80cb-798366d94677" />
+<img width="757" height="414" alt="AccountPlayed window" src="https://github.com/user-attachments/assets/b2f04b66-0b31-4f1d-86ac-ad13143e7fde" />
 
-**Features:**
-- View your account's top played time by class
-- Sorted by (class / total account played) as a percentage
-- Small popup UI (resize, drag, move, and scroll as you please!)
-- Minimap button to toggle UI (fades when mouse is not over minimap)
-- Hover over classes to get a popup of all characters making up the playtime
-- Button to toggle between Years/Days or Hours/Min
-- Press Escape to close window
-- **(NEW)** Rework existing slash commands to use a more consistent name: `/aplayed`
-- **(NEW)** `/aplayed minimap` - remove the minimap icon (toggle on/off OR use `/aplayed reset` and run `/reload`)
-- **(NEW/Work-in-Progress)** Localized framework currently supporting enUS, zhCN, zhTW, frFR
+## Features
 
-**Usage:**
-- `/aplayed`         - list available commands
-- `/aplayed show`    - toggle class time window
-- `/aplayed minimap` - toggle the AccountPlayed minimap icon on/off
-- `/aplayed reset`   - reset the position of the minimap button to the bottom left of the minimap
-- `/apdebug`         - prints a list of all stored characters to chat in the following format: `Realm-Name: TimePlayed (CLASS)`
+- Class, character, race, and faction views across every tracked realm
+- Bar and pie visualizations for distribution views
+- Deterministic sorting by played time, with totals and percentages
+- Character tooltips, chat summaries, and deletion controls
+- A movable, resizable, scrollable window that remembers its layout
+- Hours/minutes and years/days time formats
+- Configurable text scale and value display
+- Movable minimap button with snapping, fading, locking, and visibility controls
+- LibDataBroker support for display-bar add-ons
+- English fallback plus zhCN, zhTW, frFR, ruRU, deDE, esMX, esES, and ptBR locale data
+- A versioned LibStub API for other add-ons
 
-**Deprecated** (will be removed in a future update):
-- `/apclasswin` - toggle class time window (use new API: `/aplayed show`)
-- `/apresetmap` - reset the position of the minimap button to the bottom left of the minimap (use new API: `/aplayed reset`)
+AccountPlayed can only know about a character after that character has been
+logged in while the add-on is enabled. Race and faction metadata for older
+records is filled in the next time each character reports `/played`; until
+then, it appears under **Unknown**.
 
-### Quick-start:
-- Download the latest release here on github. extract the zip to your games addon folder.
-- (Recommended) Download with your favorite addon manager via [Curse](https://www.curseforge.com/wow/addons/account-played) OR [Wago.io](https://addons.wago.io/addons/accountplayed)
+## Commands
 
-### Honorable Mentions:
-HUGE Thank you to everyone in [Seems Good](https://seemsgood.org) for testing and motivating to publish and share with others.
-- Pip: Original idea to share time played and compare with other guildies.
-- Whare: WoW api help and debugging
-- [Amadeus](https://github.com/Amadeus-): Minimap fix to support all ui layouts, padding with class names, and better fomatting
-- [SGSwdzgr](https://github.com/SGSwdzgr): Added Localizatin Support & framework for Simplified Chinese (zhCN) and Traditional Chinese (zhTW), English (enUS), and a way for others to help localize.
-- [ZelionGG](https://github.com/Jeremy-Gstein/AccountPlayed/commits?author=ZelionGG): Added Localization for French locale (frFr)
-- [Hubbotu](https://github.com/Hubbotu) - Added Localization for Russian (ruRU)
-- [Smooth](https://github.com/Smooth26) - Added Localization for Spanish (esES), (esMX), and (ptBR)
-- [DaBear78](https://github.com/DaBear78) - Added Localization for German (deDE)
-- [WOWHEAD](https://www.wowhead.com/news/find-your-favorite-class-with-account-played-380300) - Huge thanks for promoting the addon!! seeing all the screenshots shared online is surreal to say the least.
-- [r/wow](https://www.reddit.com/r/wow/comments/1quo3h0/account_played_track_and_display_your_characters/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) - All the great feedback like missing documentation on slashcommands, bugs with missing minimap, and screenshots shared (:
+| Command | Action |
+| --- | --- |
+| `/aplayed` | Show command help |
+| `/aplayed show` | Toggle the played-time window |
+| `/aplayed minimap` | Show or hide the minimap button |
+| `/aplayed reset` | Reset and show the minimap button |
+| `/apdelete Name-Realm` | Remove a tracked character after confirmation |
+| `/apdebug` | Print all stored character records |
 
---- 
+`/apclasswin` and `/apresetmap` remain as deprecated compatibility aliases.
 
-### Contributing:
-- PRs/Issues welcome! or faster response/general feedback, free to reach out via email: jeremy51b5@pm.me
-- install `just` to run the repos `justfile` 
-- set PATHs to match local at the top of `justfile`
+## Installation
 
-**Localizing**:
-(Huge thanks to [SGSwdzgr](https://github.com/SGSwdzgr) for implimenting a framework for adding locales!!)
-- if using AI for translations please markup with: `-- (AI-GENERATED TRANSLATION)` 
-- if fixing a translation (or adding) markup with your github username: `-- (FIXED BY: Jeremy-Gstein)` (example)
-- supported languages/locales sourced from: [WoW's API](https://warcraft.wiki.gg/wiki/API_GetAvailableLocaleInfo)
+Install AccountPlayed with an add-on manager from
+[CurseForge](https://www.curseforge.com/wow/addons/account-played) or
+[Wago](https://addons.wago.io/addons/accountplayed), or extract a
+[GitHub release](https://github.com/Jeremy-Gstein/AccountPlayed/releases) into
+the appropriate `Interface/AddOns` directory.
 
-| Status        | Country                              | Language   | Code |
-|---------------|--------------------------------------|------------|------|
-| Completed     | Brazil                               | Portuguese | ptBR |
-| Completed     | China                                | Chinese    | zhCN |
-| Completed     | France                               | French     | frFR |
-| Completed     | Germany                              | German     | deDE |
-| Completed     | Russia                               | Russian    | ruRU |
-| Completed     | Spain                                | Spanish    | esES |
-| Completed     | Taiwan                               | Chinese    | zhTW |
-| Completed     | United States of America             | English    | enUS |
-| Not Completed | Italy                                | Italian    | itIT |
-| Not Completed | Mexico                               | Spanish    | esMX |
-| Not Completed | Portugal                             | Portuguese | ptPT |
-| Not Completed | Republic of Korea                    | Korean     | koKR |
-| Not Completed | Taiwan                               | English    | enTW |
-| Not Completed | Great Britain and Northern Ireland   | English    | enGB |
+## Public API
 
----
+The `AccountPlayed-1.0` LibStub library exposes snapshots of the tracked data.
+API version 2 adds race and faction metadata and totals while preserving the
+version 1 methods.
 
-**Update and Version maintaining:**
-```txt
-*.0.0 - Breaking changes or New Features
-0.*.0 - New Supported Language/Locale
-0.0.* - Bug fixes, .toc updates, and small changes
+```lua
+local Played = LibStub("AccountPlayed-1.0")
+
+local totalSeconds = Played:GetAccountTotal()
+local characters = Played:GetAllCharacters()
+local classTotals = Played:GetClassTotals()
+
+Played:OnCharacterUpdated("MyAddon", function(
+    realm, name, seconds, classFile, raceFile, factionFile
+)
+    -- The stored record changed.
+end)
+
+-- Later:
+Played:OffCharacterUpdated("MyAddon")
 ```
 
-Examples with justfile:
-- install `just` to run the repos `justfile` 
-- set PATHs to match local at the top of `justfile`
+Available queries include `GetAccountTotal`, `GetClassTotals`,
+`GetRaceTotals`, `GetFactionTotals`, `GetAllCharacters`,
+`GetCharactersByClass`, `GetCharacterCount`, `GetCharacterData`,
+`HasCharacter`, and `GetCurrentCharacterTime`. Time helpers are
+`FormatTime`, `FormatTimeHours`, and `FormatTimeDetailed`.
+
+Advanced CallbackHandler consumers can register with their own handler object:
+
+```lua
+Played.RegisterCallback(myObject, "CharacterUpdated", "OnCharacterUpdated")
+```
+
+## Development
+
+The rewrite separates lifecycle, saved data, formatting, UI, settings,
+minimap, commands, broker integration, and the public API. Vendor libraries in
+`Libs/` remain unchanged.
+
+Run the local verification suite with:
+
 ```bash
-# Requires `just`
-just --list # print all commands
-just ls retail # list all files in retail addon dir
-just sync retail # sync local repo changes to retail addon dir 
-just rm retail # remove addon from retail dir. (keeps local repo unchanged)
-just debug # print os, set PATHs, shasum of all files.
+lua tests/run.lua
+luac -p *.lua Libs/*.lua
 ```
 
-Generate a Tagged Release to trigger .github/workflows/build.yml (packager action)
-```bash
-# just build <tag> <commit>
-just build 1.0.0 "Commit Message for Tagged release"
-```
+The included `justfile` contains optional local sync and release helpers.
+Override its install paths for your own WoW installation.
+
+### Localization
+
+Translations are community-maintained. Please identify AI-generated additions
+with `-- (AI-GENERATED TRANSLATION)` and translation fixes with a contributor
+comment.
+
+| Status | Language | Locale |
+| --- | --- | --- |
+| Completed | Portuguese (Brazil) | ptBR |
+| Completed | Chinese (Simplified) | zhCN |
+| Completed | Chinese (Traditional) | zhTW |
+| Completed | French | frFR |
+| Completed | German | deDE |
+| Completed | Russian | ruRU |
+| Completed | Spanish (Mexico) | esMX |
+| Completed | Spanish (Spain) | esES |
+| Completed | English (United States) | enUS |
+| Not completed | Italian | itIT |
+| Not completed | Korean | koKR |
+| Not completed | Portuguese (Portugal) | ptPT |
+
+## Thanks
+
+Thanks to everyone in [Seems Good](https://seemsgood.org) for testing and
+encouragement, and to the community contributors who built and translated the
+original add-on:
+
+- Pip, for the original idea
+- Whare, for WoW API help and debugging
+- [Amadeus](https://github.com/Amadeus-), for minimap and formatting fixes
+- [SGSwdzgr](https://github.com/SGSwdzgr), for the localization framework and Chinese locales
+- [ZelionGG](https://github.com/Jeremy-Gstein/AccountPlayed/commits?author=ZelionGG), for French
+- [Hubbotu](https://github.com/Hubbotu), for Russian
+- [Smooth](https://github.com/Smooth26), for Spanish and Brazilian Portuguese
+- [DaBear78](https://github.com/DaBear78), for German
+
+Issues and pull requests are welcome.

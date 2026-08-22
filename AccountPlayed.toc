@@ -1,7 +1,7 @@
 ## Interface: 11508, 20505, 50503, 120005, 120007, 120100
 ## Version: @project-version@
 ## Title: Account Played
-## Notes: get account /played and sort by class (/aplayed show OR minimap button)
+## Notes: Track account-wide /played time by class, character, race, and faction
 ## Author: Jeremy-Gstein
 ## SavedVariables: AccountPlayedDB, AccountPlayedMinimapDB, AccountPlayedPopupDB
 ## IconTexture: Interface\Addons\AccountPlayed\aplogo.blp
@@ -14,9 +14,14 @@
 Libs\LibStub.lua
 Libs\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1.lua
-Localization.lua
 AccountPlayed.lua
+Localization.lua
+Data.lua
+Formatting.lua
+CharacterPanel.lua
+MainWindow.lua
 MinimapButton.lua
 Settings.lua
+Commands.lua
+Broker.lua
 API.lua
-

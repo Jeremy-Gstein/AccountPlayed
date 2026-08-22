@@ -1,0 +1,9 @@
+package-as: AccountPlayed
+
+ignore:
+  - .github
+  - .agents
+  - .codex
+  - tests
+  - README.md
+  - justfile
