@@ -16,6 +16,10 @@ local AP = AccountPlayed
 
 local BUTTON_NAME = "AccountPlayed_MinimapButton"
 
+---@class LibDBIcon.button
+---@field snapped boolean
+---@field isDragging boolean
+
 -- Migrate from old angle-only format or initialize defaults
 local function InitDB()
     if not AccountPlayedMinimapDB then
@@ -42,6 +46,20 @@ local function InitDB()
     -- Default locked state
     if AccountPlayedMinimapDB.locked == nil then
         AccountPlayedMinimapDB.locked = false
+    end
+
+    if AccountPlayedMinimapDB.hide == nil then
+        AccountPlayedMinimapDB.hide = AccountPlayedMinimapDB.hidden or false
+    end
+
+    if AccountPlayedMinimapDB.showInCompartment == nil then
+        AccountPlayedMinimapDB.showInCompartment = true
+    end
+
+    AccountPlayedMinimapDB.hidden = nil
+
+    if AccountPlayedMinimapDB.minimapPos == nil then
+        AccountPlayedMinimapDB.minimapPos = math.deg(math.atan2(AccountPlayedMinimapDB.y, AccountPlayedMinimapDB.x)) % 360
     end
 end
 
@@ -75,32 +93,28 @@ end
 
 -- Creation of the Minimap button
 local function CreateMinimapButton()
-    -- Don't create if hidden
-    if AccountPlayedMinimapDB.hidden then
+    local btn = _G[BUTTON_NAME]
+    if btn then
+        UpdateButtonPosition(btn)
         return
     end
 
-    -- Update position if already exists
-    if _G[BUTTON_NAME] then
-        UpdateButtonPosition(_G[BUTTON_NAME])
-        return
-    end
+    local dataObject = LibStub("LibDataBroker-1.1"):GetDataObjectByName("AccountPlayed")
+    local minimapIcon = LibStub("LibDBIcon-1.0")
+    minimapIcon:Register("AccountPlayed", dataObject, AccountPlayedMinimapDB)
+    btn = minimapIcon:GetMinimapButton("AccountPlayed")
+    _G[BUTTON_NAME] = btn
 
-    local btn = CreateFrame("Button", BUTTON_NAME, Minimap)
-    btn:SetSize(31, 31)
-    btn:SetFrameStrata("MEDIUM")
-    btn:SetFrameLevel(8)
-    btn:SetMovable(true)
-    btn:EnableMouse(true)
-    btn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-    btn:RegisterForDrag("LeftButton")
-    btn:SetClampedToScreen(true)
+    minimapIcon:SetButtonIcon("AccountPlayed", "Interface\\Icons\\INV_Misc_PocketWatch_01", 17, "CENTER")
+    minimapIcon:SetButtonBorder("AccountPlayed", "Interface\\Minimap\\MiniMap-TrackingBorder", 53, "TOPLEFT")
+    minimapIcon:SetButtonHighlightTexture("AccountPlayed", "Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
+
     btn:SetAlpha(0.01)  -- Start faded out
 
     -- Tooltip, Click Handlers, and Fade on Hover
     btn:SetScript("OnEnter", function(self)
         -- Don't show tooltip or fade in when the button is intentionally hidden
-        if AccountPlayedMinimapDB.hidden then return end
+        if AccountPlayedMinimapDB.hide then return end
 
         -- Show tooltip
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -111,13 +125,14 @@ local function CreateMinimapButton()
             GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_DRAG_MOVE"] .. "|r", "|cffffff00" .. L["TOOLTIP_MOVE_ICON"] .. "|r")
         end
         GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_RIGHT_CLICK"] .. "|r", "|cffff8800" .. L["TOOLTIP_LOCK_UNLOCK"] .. "|r")
+        GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_CTRL_RIGHT_CLICK"] .. "|r", "|cffff8800" .. L["TOOLTIP_HIDE_BUTTON"] .. "|r")
         GameTooltip:AddLine(" ")
         local statusText = AccountPlayedMinimapDB.locked and "|cffff0000[" .. L["STATUS_LOCKED"] .. "]|r" or "|cff00ff00[" .. L["STATUS_UNLOCKED"] .. "]|r"
         GameTooltip:AddLine(statusText, 1, 1, 1)
         GameTooltip:Show()
         
         -- Keep button visible when hovering over it
-        if self.snapped and not AccountPlayedMinimapDB.hidden then
+        if self.snapped and not AccountPlayedMinimapDB.hide then
             FadeButton(self, 1, 0.15)
         end
     end)
@@ -137,6 +152,16 @@ local function CreateMinimapButton()
             PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             AP.ToggleClassWindow()
         elseif button == "RightButton" then
+            if IsControlKeyDown() then
+                AccountPlayedMinimapDB.hide = true
+                UIFrameFadeRemoveFrame(self)
+                self:SetAlpha(0)
+                self:EnableMouse(false)
+                self:Hide()
+                print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_HIDDEN"])
+                return
+            end
+
             AccountPlayedMinimapDB.locked = not AccountPlayedMinimapDB.locked
             PlaySound(AccountPlayedMinimapDB.locked and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
             
@@ -152,7 +177,7 @@ local function CreateMinimapButton()
 
     -- Hook Minimap's own mouse events instead of creating blocking overlay
     Minimap:HookScript("OnEnter", function()
-        if not btn.isDragging and btn.snapped and not AccountPlayedMinimapDB.hidden then
+        if not btn.isDragging and btn.snapped and not AccountPlayedMinimapDB.hide then
             FadeButton(btn, 1, 0.15)
         end
     end)
@@ -163,22 +188,6 @@ local function CreateMinimapButton()
             FadeButton(btn, 0.01, 0.15)
         end
     end)
-
-    -- Border (OVERLAY, positioned first)
-    btn.border = btn:CreateTexture(nil, "OVERLAY")
-    btn.border:SetSize(53, 53)
-    btn.border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
-    btn.border:SetPoint("TOPLEFT")
-
-    -- Icon (ARTWORK layer, smaller size)
-    btn.icon = btn:CreateTexture(nil, "ARTWORK")
-    btn.icon:SetSize(17, 17)
-    btn.icon:SetTexture("Interface\\Icons\\INV_Misc_PocketWatch_01")
-    btn.icon:SetPoint("CENTER")
-    btn.icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
-
-    -- Highlight
-    btn:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight", "ADD")
 
     -- Drag handlers with cached values
     btn:SetScript("OnDragStart", function(self)
@@ -235,6 +244,7 @@ local function CreateMinimapButton()
 
             AccountPlayedMinimapDB.x = dx
             AccountPlayedMinimapDB.y = dy
+            AccountPlayedMinimapDB.minimapPos = math.deg(math.atan2(dy, dx)) % 360
             self:ClearAllPoints()
             self:SetPoint("CENTER", minimap, "CENTER", dx, dy)
         end)
@@ -291,7 +301,8 @@ function AP.ResetMinimapButton()
     AccountPlayedMinimapDB.y = math.sin(angle) * radius
 
     -- Clear hidden flag so the button becomes visible again
-    AccountPlayedMinimapDB.hidden = false
+    AccountPlayedMinimapDB.hide = false
+    AccountPlayedMinimapDB.minimapPos = 225
 
     local btn = _G[BUTTON_NAME]
     if btn then
