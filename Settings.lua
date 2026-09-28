@@ -65,11 +65,28 @@ local function ApplyScaleToRows(scale)
     end
 end
 
+local function SetTextScale(scale)
+    AccountPlayedPopupDB.textScale = scale
+    ApplyScaleToRows(scale)
+end
+
+local function SetValueMode(mode)
+    AccountPlayedPopupDB.valueMode = mode
+    if AP.popupFrame and AP.popupFrame.UpdateDisplay then
+        AP.popupFrame:UpdateDisplay()
+    end
+end
+
+local function ResetDisplaySettings()
+    SetTextScale(SETTINGS_DEFAULTS.textScale)
+    SetValueMode(SETTINGS_DEFAULTS.valueMode)
+end
+
 
 local function SetMinimapVisible(show)
     local btn = _G["AccountPlayed_MinimapButton"]
     if show then
-        AccountPlayedMinimapDB.hidden = false
+        AccountPlayedMinimapDB.hide = false
         if btn then
             btn:EnableMouse(true)
             btn:Show()
@@ -78,13 +95,118 @@ local function SetMinimapVisible(show)
             AP.CreateMinimapButton()
         end
     else
-        AccountPlayedMinimapDB.hidden = true
+        AccountPlayedMinimapDB.hide = true
         if btn then
             UIFrameFadeRemoveFrame(btn)
             btn:SetAlpha(0)
             btn:EnableMouse(false)
             btn:Hide()
         end
+    end
+end
+
+local function CreateInterfaceOptionsPanel()
+    local panel = CreateFrame("Frame")
+    panel.name = L["ADDON_NAME"]
+    panel:SetSize(600, 360)
+
+    local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    title:SetPoint("TOPLEFT", 16, -16)
+    title:SetText(L["ADDON_NAME"])
+
+    local scaleLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    scaleLabel:SetPoint("TOPLEFT", 16, -56)
+    scaleLabel:SetText(L["SETTINGS_TEXT_SCALE"])
+
+    local scaleValue = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    scaleValue:SetPoint("LEFT", scaleLabel, "RIGHT", 12, 0)
+
+    local slider = CreateFrame("Slider", "AccountPlayedOptionsTextScaleSlider", panel, "OptionsSliderTemplate")
+    slider:SetPoint("TOPLEFT", 16, -80)
+    slider:SetWidth(280)
+    slider:SetMinMaxValues(1.0, 2.0)
+    slider:SetValueStep(0.05)
+    slider:SetObeyStepOnDrag(true)
+    _G[slider:GetName() .. "Low"]:SetText("100%")
+    _G[slider:GetName() .. "High"]:SetText("200%")
+    _G[slider:GetName() .. "Text"]:SetText("")
+
+    local function RefreshScale()
+        scaleValue:SetText(string.format("%d%%", math.floor(slider:GetValue() * 100 + 0.5)))
+    end
+
+    slider:SetScript("OnValueChanged", function(self, value)
+        RefreshScale()
+        if self._initializing then return end
+        SetTextScale(value)
+    end)
+
+    local divider = panel:CreateTexture(nil, "ARTWORK")
+    divider:SetHeight(1)
+    divider:SetPoint("TOPLEFT", 16, -126)
+    divider:SetPoint("TOPRIGHT", -16, -126)
+    divider:SetColorTexture(0.4, 0.4, 0.4, 0.6)
+
+    local minimapCheck = CreateFrame("CheckButton", "AccountPlayedOptionsMinimapCheck", panel, "InterfaceOptionsCheckButtonTemplate")
+    minimapCheck:SetPoint("TOPLEFT", 8, -142)
+    _G[minimapCheck:GetName() .. "Text"]:SetText(MINIMAP_LABEL or L["TOOLTIP_TITLE"])
+    minimapCheck:SetScript("OnClick", function(self)
+        SetMinimapVisible(self:GetChecked())
+    end)
+
+    local daysCheck = CreateFrame("CheckButton", "AccountPlayedOptionsDaysCheck", panel, "InterfaceOptionsCheckButtonTemplate")
+    daysCheck:SetPoint("TOPLEFT", 8, -184)
+    _G[daysCheck:GetName() .. "Text"]:SetText(L["SETTINGS_DAYS_ONLY"])
+
+    local percentCheck = CreateFrame("CheckButton", "AccountPlayedOptionsPercentCheck", panel, "InterfaceOptionsCheckButtonTemplate")
+    percentCheck:SetPoint("TOPLEFT", 220, -184)
+    _G[percentCheck:GetName() .. "Text"]:SetText(L["SETTINGS_PERCENT_ONLY"])
+
+    local function SetOptionValueMode(mode)
+        daysCheck:SetChecked(mode == "days")
+        percentCheck:SetChecked(mode == "percent")
+        SetValueMode(mode)
+    end
+
+    daysCheck:SetScript("OnClick", function(self)
+        SetOptionValueMode(self:GetChecked() and "days" or "both")
+    end)
+    percentCheck:SetScript("OnClick", function(self)
+        SetOptionValueMode(self:GetChecked() and "percent" or "both")
+    end)
+
+    local resetButton = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+    resetButton:SetSize(120, 24)
+    resetButton:SetPoint("TOPLEFT", 16, -238)
+    resetButton:SetText(L["SETTINGS_RESET"])
+    resetButton:SetScript("OnClick", function()
+        ResetDisplaySettings()
+        slider._initializing = true
+        slider:SetValue(SETTINGS_DEFAULTS.textScale)
+        slider._initializing = false
+        RefreshScale()
+        SetOptionValueMode(SETTINGS_DEFAULTS.valueMode)
+    end)
+
+    panel:SetScript("OnShow", function()
+        EnsureSettingsDefaults()
+        slider._initializing = true
+        slider:SetValue(AccountPlayedPopupDB.textScale)
+        slider._initializing = false
+        RefreshScale()
+        minimapCheck:SetChecked(not AccountPlayedMinimapDB.hide)
+        local mode = AccountPlayedPopupDB.valueMode
+        daysCheck:SetChecked(mode == "days")
+        percentCheck:SetChecked(mode == "percent")
+    end)
+
+    if Settings and Settings.RegisterCanvasLayoutCategory then
+        local category = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
+        Settings.RegisterAddOnCategory(category)
+        AP.settingsCategory = category
+    elseif _G["InterfaceOptions_AddCategory"] then
+        _G["InterfaceOptions_AddCategory"](panel)
+        AP.settingsPanel = panel
     end
 end
 
@@ -168,9 +290,8 @@ local function CreateSettingsPanel()
             RefreshScaleLabel()
             return
         end
-        AccountPlayedPopupDB.textScale = value
         RefreshScaleLabel()
-        ApplyScaleToRows(value)
+        SetTextScale(value)
         PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
     end)
 
@@ -207,7 +328,7 @@ local function CreateSettingsPanel()
     mmLabel:SetText(MINIMAP_LABEL or L["TOOLTIP_TITLE"])
     mmLabel:SetTextColor(0.9, 0.9, 0.9)
 
-    mmCheck:SetChecked(not AccountPlayedMinimapDB.hidden)
+    mmCheck:SetChecked(not AccountPlayedMinimapDB.hide)
 
     mmCheck:SetScript("OnClick", function(self)
         local show = self:GetChecked()
@@ -219,7 +340,7 @@ local function CreateSettingsPanel()
     mmCheck:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:AddLine(
-            (not AccountPlayedMinimapDB.hidden and HIDE or SHOW) .. " " .. (MINIMAP_LABEL or L["TOOLTIP_TITLE"]),
+            (not AccountPlayedMinimapDB.hide and HIDE or SHOW) .. " " .. (MINIMAP_LABEL or L["TOOLTIP_TITLE"]),
             1, 1, 1)
         GameTooltip:Show()
     end)
@@ -231,14 +352,11 @@ local function CreateSettingsPanel()
     -- Helper: update both checkboxes and save the mode
     local daysCheck, pctCheck   -- forward-declared so each OnClick can reference the other
 
-    local function SetValueMode(mode)
-        AccountPlayedPopupDB.valueMode = mode
+    local function SetGearValueMode(mode)
         daysCheck:SetChecked(mode == "days")
         pctCheck:SetChecked(mode == "percent")
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-        if AP.popupFrame and AP.popupFrame.UpdateDisplay then
-            AP.popupFrame:UpdateDisplay()
-        end
+        SetValueMode(mode)
     end
 
     -- "Days only" checkbox (left side)
@@ -255,9 +373,9 @@ local function CreateSettingsPanel()
     daysCheck:SetScript("OnClick", function(self)
         -- Clicking a checked box cycles back to "both"; clicking unchecked sets "days"
         if not self:GetChecked() then
-            SetValueMode("both")
+            SetGearValueMode("both")
         else
-            SetValueMode("days")
+            SetGearValueMode("days")
         end
     end)
     daysCheck:SetScript("OnEnter", function(self)
@@ -280,9 +398,9 @@ local function CreateSettingsPanel()
 
     pctCheck:SetScript("OnClick", function(self)
         if not self:GetChecked() then
-            SetValueMode("both")
+            SetGearValueMode("both")
         else
-            SetValueMode("percent")
+            SetGearValueMode("percent")
         end
     end)
     pctCheck:SetScript("OnEnter", function(self)
@@ -301,20 +419,14 @@ local function CreateSettingsPanel()
     resetBtn:SetPoint("BOTTOMLEFT", p, "BOTTOMLEFT", 12, 10)
     resetBtn:SetText(RESET_TO_DEFAULT and RESET_TO_DEFAULT or L["SETTINGS_RESET"])
     resetBtn:SetScript("OnClick", function()
-        for k, v in pairs(SETTINGS_DEFAULTS) do
-            AccountPlayedPopupDB[k] = v
-        end
+        ResetDisplaySettings()
         slider._initializing = true
         slider:SetValue(SETTINGS_DEFAULTS.textScale)
         slider._initializing = false
         RefreshScaleLabel()
-        ApplyScaleToRows(SETTINGS_DEFAULTS.textScale)
         -- Reset mode checkboxes (default = "both" → both unchecked)
         daysCheck:SetChecked(SETTINGS_DEFAULTS.valueMode == "days")
         pctCheck:SetChecked(SETTINGS_DEFAULTS.valueMode == "percent")
-        if AP.popupFrame and AP.popupFrame.UpdateDisplay then
-            AP.popupFrame:UpdateDisplay()
-        end
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     end)
     resetBtn:SetScript("OnEnter", function(self)
@@ -413,7 +525,7 @@ local function AttachGear(parentFrame)
             -- Sync minimap checkbox to current hidden state
             for _, child in next, { panel:GetChildren() } do
                 if child.GetChecked then
-                    child:SetChecked(not AccountPlayedMinimapDB.hidden)
+                    child:SetChecked(not AccountPlayedMinimapDB.hide)
                 end
             end
             -- Re-sync slider to the current saved value without triggering
@@ -452,6 +564,8 @@ hookFrame:RegisterEvent("PLAYER_LOGIN")
 hookFrame:SetScript("OnEvent", function(self, event)
     if event == "PLAYER_LOGIN" then
         self:UnregisterEvent("PLAYER_LOGIN")
+        EnsureSettingsDefaults()
+        CreateInterfaceOptionsPanel()
         self:RegisterEvent("PLAYER_ENTERING_WORLD")
         return
     end

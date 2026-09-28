@@ -14,6 +14,7 @@
 Libs\LibStub.lua
 Libs\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0.lua
 Localization.lua
 AccountPlayed.lua
 MinimapButton.lua

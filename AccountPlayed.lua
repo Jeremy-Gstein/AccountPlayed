@@ -844,15 +844,15 @@ SlashCmdList.ACCOUNTPLAYED = function(input)
     if input == "minimap" then
         local btn = _G["AccountPlayed_MinimapButton"]
         if btn then
-            if not AccountPlayedMinimapDB.hidden then
-                AccountPlayedMinimapDB.hidden = true
+            if not AccountPlayedMinimapDB.hide then
+                AccountPlayedMinimapDB.hide = true
                 UIFrameFadeRemoveFrame(btn)
                 btn:SetAlpha(0)
                 btn:EnableMouse(false)
                 btn:Hide()
                 print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_HIDDEN"])
             else
-                AccountPlayedMinimapDB.hidden = false
+                AccountPlayedMinimapDB.hide = false
                 btn:EnableMouse(true)
                 btn:Show()
                 if btn.snapped then
@@ -862,8 +862,8 @@ SlashCmdList.ACCOUNTPLAYED = function(input)
                 end
                 print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
             end
-        elseif AccountPlayedMinimapDB.hidden then
-            AccountPlayedMinimapDB.hidden = false
+        elseif AccountPlayedMinimapDB.hide then
+            AccountPlayedMinimapDB.hide = false
             if AP.CreateMinimapButton then
                 AP.CreateMinimapButton()
             end
@@ -893,7 +893,7 @@ local persistFrame = CreateFrame("Frame")
 persistFrame:RegisterEvent("PLAYER_LOGIN")
 persistFrame:SetScript("OnEvent", function(self)
     C_Timer.After(0, function()
-        if AccountPlayedMinimapDB and AccountPlayedMinimapDB.hidden then
+        if AccountPlayedMinimapDB and AccountPlayedMinimapDB.hide then
             local btn = _G["AccountPlayed_MinimapButton"]
             if btn then
                 btn:EnableMouse(false)
