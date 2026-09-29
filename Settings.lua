@@ -83,28 +83,6 @@ local function ResetDisplaySettings()
 end
 
 
-local function SetMinimapVisible(show)
-    local btn = _G["AccountPlayed_MinimapButton"]
-    if show then
-        AccountPlayedMinimapDB.hide = false
-        if btn then
-            btn:EnableMouse(true)
-            btn:Show()
-            btn:SetAlpha(1)
-        elseif AP.CreateMinimapButton then
-            AP.CreateMinimapButton()
-        end
-    else
-        AccountPlayedMinimapDB.hide = true
-        if btn then
-            UIFrameFadeRemoveFrame(btn)
-            btn:SetAlpha(0)
-            btn:EnableMouse(false)
-            btn:Hide()
-        end
-    end
-end
-
 local function CreateInterfaceOptionsPanel()
     local panel = CreateFrame("Frame")
     panel.name = L["ADDON_NAME"]
@@ -151,7 +129,7 @@ local function CreateInterfaceOptionsPanel()
     minimapCheck:SetPoint("TOPLEFT", 8, -142)
     _G[minimapCheck:GetName() .. "Text"]:SetText(MINIMAP_LABEL or L["TOOLTIP_TITLE"])
     minimapCheck:SetScript("OnClick", function(self)
-        SetMinimapVisible(self:GetChecked())
+        AP.SetMinimapVisible(self:GetChecked())
     end)
 
     local daysCheck = CreateFrame("CheckButton", "AccountPlayedOptionsDaysCheck", panel, "InterfaceOptionsCheckButtonTemplate")
@@ -334,7 +312,7 @@ local function CreateSettingsPanel()
         local show = self:GetChecked()
         PlaySound(show and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
                        or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
-        SetMinimapVisible(show)
+        AP.SetMinimapVisible(show)
     end)
 
     mmCheck:SetScript("OnEnter", function(self)

@@ -52,9 +52,7 @@ local function InitDB()
         AccountPlayedMinimapDB.hide = AccountPlayedMinimapDB.hidden or false
     end
 
-    if AccountPlayedMinimapDB.showInCompartment == nil then
-        AccountPlayedMinimapDB.showInCompartment = true
-    end
+    AccountPlayedMinimapDB.showInCompartment = true
 
     AccountPlayedMinimapDB.hidden = nil
 
@@ -69,6 +67,21 @@ local function UpdateButtonPosition(button)
     local y = AccountPlayedMinimapDB.y or 0
     button:ClearAllPoints()
     button:SetPoint("CENTER", Minimap, "CENTER", x, y)
+end
+
+local function ApplySavedVisibility(button)
+    if AccountPlayedMinimapDB.hide then
+        UIFrameFadeRemoveFrame(button)
+        if button.fadeOut then
+            button.fadeOut:Stop()
+        end
+        button:SetAlpha(0)
+        button:EnableMouse(false)
+        button:Hide()
+    else
+        button:EnableMouse(true)
+        button:Show()
+    end
 end
 
 -- Fade animation using Blizzard's built-in system
@@ -96,6 +109,7 @@ local function CreateMinimapButton()
     local btn = _G[BUTTON_NAME]
     if btn then
         UpdateButtonPosition(btn)
+        ApplySavedVisibility(btn)
         return
     end
 
@@ -140,6 +154,8 @@ local function CreateMinimapButton()
     btn:SetScript("OnLeave", function(self)
         -- Hide tooltip
         GameTooltip:Hide()
+
+        if AccountPlayedMinimapDB.hide then return end
         
         -- Only fade if we're leaving both the button AND the minimap area
         if self.snapped and not Minimap:IsMouseOver() then
@@ -153,11 +169,7 @@ local function CreateMinimapButton()
             AP.ToggleClassWindow()
         elseif button == "RightButton" then
             if IsControlKeyDown() then
-                AccountPlayedMinimapDB.hide = true
-                UIFrameFadeRemoveFrame(self)
-                self:SetAlpha(0)
-                self:EnableMouse(false)
-                self:Hide()
+                AP.SetMinimapVisible(false)
                 print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_HIDDEN"])
                 return
             end
@@ -184,7 +196,7 @@ local function CreateMinimapButton()
     
     Minimap:HookScript("OnLeave", function()
         -- Only fade out if mouse is not over the button itself
-        if not btn.isDragging and btn.snapped and not btn:IsMouseOver() then
+        if not AccountPlayedMinimapDB.hide and not btn.isDragging and btn.snapped and not btn:IsMouseOver() then
             FadeButton(btn, 0.01, 0.15)
         end
     end)
@@ -268,9 +280,20 @@ local function CreateMinimapButton()
     btn:HookScript("OnHide", function(self)
         -- Cancel any running fades
         UIFrameFadeRemoveFrame(self)
+        if self.fadeOut then
+            self.fadeOut:Stop()
+        end
         -- Remove OnUpdate if dragging was interrupted
         self:SetScript("OnUpdate", nil)
         self.isDragging = false
+    end)
+
+    btn:HookScript("OnShow", function(self)
+        if AccountPlayedMinimapDB.hide then
+            self:SetAlpha(0)
+            self:EnableMouse(false)
+            self:Hide()
+        end
     end)
 
     -- Determine initial snap state
@@ -288,10 +311,34 @@ local function CreateMinimapButton()
     end
 
     UpdateButtonPosition(btn)
+    ApplySavedVisibility(btn)
 end
 
 -- Expose so AccountPlayed.lua can create the button on demand (e.g. /aplayed minimap to re-show after a hidden reload)
 AP.CreateMinimapButton = CreateMinimapButton
+
+function AP.SetMinimapVisible(show)
+    show = not not show
+    AccountPlayedMinimapDB.hide = not show
+    AccountPlayedMinimapDB.showInCompartment = true
+
+    local minimapIcon = LibStub("LibDBIcon-1.0")
+    local btn = _G[BUTTON_NAME]
+    if not btn then
+        CreateMinimapButton()
+        btn = _G[BUTTON_NAME]
+    end
+
+    if btn then
+        ApplySavedVisibility(btn)
+        btn:SetAlpha(show and 1 or 0)
+    end
+
+    if minimapIcon:IsRegistered("AccountPlayed") then
+        minimapIcon:AddButtonToCompartment("AccountPlayed")
+    end
+end
+
 -- Called by /aplayed reset (defined in AccountPlayed.lua).
 function AP.ResetMinimapButton()
     -- Reset to default position (bottom-left, 225 degrees)
@@ -300,16 +347,13 @@ function AP.ResetMinimapButton()
     AccountPlayedMinimapDB.x = math.cos(angle) * radius
     AccountPlayedMinimapDB.y = math.sin(angle) * radius
 
-    -- Clear hidden flag so the button becomes visible again
-    AccountPlayedMinimapDB.hide = false
     AccountPlayedMinimapDB.minimapPos = 225
 
+    AP.SetMinimapVisible(true)
     local btn = _G[BUTTON_NAME]
     if btn then
         btn.snapped = true
         UIFrameFadeRemoveFrame(btn)  -- cancel any in-progress fade
-        btn:EnableMouse(true)
-        btn:Show()
         btn:SetAlpha(0.01)  -- Snapped default: reveal on hover
         UpdateButtonPosition(btn)
         print("|cff00ff00Account Played:|r " .. L["MSG_RESET_SUCCESS"])
