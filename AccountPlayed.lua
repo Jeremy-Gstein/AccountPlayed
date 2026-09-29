@@ -842,33 +842,9 @@ SLASH_ACCOUNTPLAYED1 = "/aplayed"
 SlashCmdList.ACCOUNTPLAYED = function(input)
     input = (input or ""):match("^%s*(.-)%s*$"):lower()
     if input == "minimap" then
-        local btn = _G["AccountPlayed_MinimapButton"]
-        if btn then
-            if not AccountPlayedMinimapDB.hide then
-                AccountPlayedMinimapDB.hide = true
-                UIFrameFadeRemoveFrame(btn)
-                btn:SetAlpha(0)
-                btn:EnableMouse(false)
-                btn:Hide()
-                print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_HIDDEN"])
-            else
-                AccountPlayedMinimapDB.hide = false
-                btn:EnableMouse(true)
-                btn:Show()
-                if btn.snapped then
-                    btn:SetAlpha(0.01)
-                else
-                    btn:SetAlpha(1)
-                end
-                print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
-            end
-        elseif AccountPlayedMinimapDB.hide then
-            AccountPlayedMinimapDB.hide = false
-            if AP.CreateMinimapButton then
-                AP.CreateMinimapButton()
-            end
-            print("|cff00ff00Account Played:|r " .. L["MSG_MINIMAP_SHOWN"])
-        end
+        local show = AccountPlayedMinimapDB.hide
+        AP.SetMinimapVisible(show)
+        print("|cff00ff00Account Played:|r " .. L[show and "MSG_MINIMAP_SHOWN" or "MSG_MINIMAP_HIDDEN"])
     elseif input == "show" then
         AP.ToggleClassWindow()
     elseif input == "reset" then
@@ -884,25 +860,6 @@ SlashCmdList.ACCOUNTPLAYED = function(input)
         print("  |cffffff00/aplayed reset|r    - " .. L["CMD_HELP_RESET_DESC"])
     end
 end
-
---------------------------------------------------
--- Persist minimap hidden state across sessions
---------------------------------------------------
-
-local persistFrame = CreateFrame("Frame")
-persistFrame:RegisterEvent("PLAYER_LOGIN")
-persistFrame:SetScript("OnEvent", function(self)
-    C_Timer.After(0, function()
-        if AccountPlayedMinimapDB and AccountPlayedMinimapDB.hide then
-            local btn = _G["AccountPlayed_MinimapButton"]
-            if btn then
-                btn:EnableMouse(false)
-                btn:Hide()
-            end
-        end
-    end)
-    self:UnregisterEvent("PLAYER_LOGIN")
-end)
 
 --------------------------------------------------
 -- LibDataBroker plugin
