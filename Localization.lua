@@ -5,6 +5,9 @@ addonTable.L = L
 
 L["ADDON_NAME"] = "Account Played"
 L["WINDOW_TITLE"] = "Account Played - Time by Class"
+L["WINDOW_TITLE_CHARACTERS"] = "Account Played - Time by Character"
+L["VIEW_BY_CLASS"] = "By Class"
+L["VIEW_BY_CHARACTER"] = "By Character"
 L["NO_DATA"] = "No data yet"
 L["TOTAL"] = "TOTAL: "
 L["DEBUG_HEADER"] = "[AccountPlayed Debug] Known characters:"
@@ -18,7 +21,6 @@ L["TIME_FORMAT_HOURS"] = "Unchecked: Hours/Minutes"
 L["TOOLTIP_TITLE"] = "Account Played"
 L["TOOLTIP_LEFT_CLICK"] = "Left Click:"
 L["TOOLTIP_RIGHT_CLICK"] = "Right Click:"
-L["TOOLTIP_CTRL_RIGHT_CLICK"] = "Ctrl + Right Click:"
 L["TOOLTIP_TOGGLE_WINDOW"] = "Toggle window"
 L["TOOLTIP_HIDE_BUTTON"] = "Hide minimap icon"
 L["TOOLTIP_DRAG_MOVE"] = "Drag:"
@@ -58,6 +60,7 @@ L["CMD_DELETE_CONFIRM"] = "Are you sure you want to remove |cffffff00%s|r from A
 -- Character management panel strings
 L["CHAR_PANEL_RIGHT_CLICK"] = "Right-Click to manage characters"
 L["CHAR_PANEL_REMOVE_TIP"] = "Remove from Account Played"
+L["CHARACTER_RIGHT_CLICK_DELETE"] = "Right-click to delete character"
 L["CLICK_TO_PRINT"] = "Left-Click to print in chat"
 
 -- Settings panel (keys only used when the equivalent Blizzard global is absent)
@@ -75,6 +78,9 @@ if GetLocale() == "zhCN" then
   -- (Translator: https://github.com/SGSwdzgr)
   L["ADDON_NAME"] = "账号游戏时间"
   L["WINDOW_TITLE"] = "账号游戏时间 - 按职业统计"
+  L["WINDOW_TITLE_CHARACTERS"] = "账号游戏时间 - 按角色统计" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "按职业" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "按角色" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "暂无数据"
   L["TOTAL"] = "总计: "
   L["DEBUG_HEADER"] = "[AccountPlayed调试] 已知角色:"
@@ -89,6 +95,7 @@ if GetLocale() == "zhCN" then
   L["TOOLTIP_LEFT_CLICK"] = "左键:"
   L["TOOLTIP_RIGHT_CLICK"] = "右键:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "切换窗口"
+  L["TOOLTIP_HIDE_BUTTON"] = "隐藏小地图图标" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "拖拽:"
   L["TOOLTIP_MOVE_ICON"] = "移动图标"
   L["TOOLTIP_LOCK_UNLOCK"] = "锁定/解锁位置"
@@ -123,6 +130,7 @@ if GetLocale() == "zhCN" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "右键点击管理角色"
   L["CHAR_PANEL_REMOVE_TIP"] = "从 Account Played 中移除"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "右键点击删除角色" -- (AI-GENERATED TRANSLATION)
   L["SETTINGS_PERCENT_ONLY"]     = "仅%"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "每个进度条后仅显示百分比，不显示时间。"
   L["SETTINGS_DAYS_ONLY"]       = "仅天数"
@@ -133,6 +141,9 @@ if GetLocale() == "zhTW" then
   -- (Translator: https://github.com/SGSwdzgr)
   L["ADDON_NAME"] = "帳號遊戲時間"
   L["WINDOW_TITLE"] = "帳號遊戲時間 - 按職業統計"
+  L["WINDOW_TITLE_CHARACTERS"] = "帳號遊戲時間 - 按角色統計" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "按職業" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "按角色" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "暫無資料"
   L["TOTAL"] = "總計: "
   L["DEBUG_HEADER"] = "[AccountPlayed調試] 已知角色:"
@@ -147,6 +158,7 @@ if GetLocale() == "zhTW" then
   L["TOOLTIP_LEFT_CLICK"] = "左鍵:"
   L["TOOLTIP_RIGHT_CLICK"] = "右鍵:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "切換視窗"
+  L["TOOLTIP_HIDE_BUTTON"] = "隱藏小地圖圖示" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "拖曳:"
   L["TOOLTIP_MOVE_ICON"] = "移動圖示"
   L["TOOLTIP_LOCK_UNLOCK"] = "鎖定/解鎖位置"
@@ -181,6 +193,7 @@ if GetLocale() == "zhTW" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "右鍵點擊管理角色"
   L["CHAR_PANEL_REMOVE_TIP"] = "從 Account Played 中移除"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "右鍵點擊刪除角色" -- (AI-GENERATED TRANSLATION)
   L["SETTINGS_PERCENT_ONLY"]     = "僅%"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "每個進度條後僅顯示百分比，不顯示時間。"
   L["SETTINGS_DAYS_ONLY"]       = "僅天數"
@@ -191,6 +204,9 @@ if GetLocale() == "frFR" then
   -- Translator: https://github.com/ZelionGG
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Temps par Classe"
+  L["WINDOW_TITLE_CHARACTERS"] = "Account Played - Temps par personnage" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "Par classe" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "Par personnage" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "Aucune donnée"
   L["TOTAL"] = "Total : "
   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personnages connus :"
@@ -204,6 +220,7 @@ if GetLocale() == "frFR" then
   L["TOOLTIP_LEFT_CLICK"] = "Clic gauche :"
   L["TOOLTIP_RIGHT_CLICK"] = "Clic droit :"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Ouvrir la fenêtre"
+  L["TOOLTIP_HIDE_BUTTON"] = "Masquer l'icône de la minicarte" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Déplacer :"
   L["TOOLTIP_MOVE_ICON"] = "Déplacer l'icône"
   L["TOOLTIP_LOCK_UNLOCK"] = "Verrouiller/Déverrouiller la position de l'icône"
@@ -238,6 +255,7 @@ if GetLocale() == "frFR" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Clic droit pour gérer les personnages"
   L["CHAR_PANEL_REMOVE_TIP"] = "Supprimer de Account Played"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "Clic droit pour supprimer le personnage" -- (AI-GENERATED TRANSLATION)
   L["CLICK_TO_PRINT"] = "Clic gauche pour afficher dans le chat"
   L["SETTINGS_PERCENT_ONLY"]     = "% Seul."
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Afficher uniquement le pourcentage après chaque barre, sans la valeur de temps."
@@ -249,6 +267,9 @@ if GetLocale() == "ruRU" then
   -- Translator ZamestoTV
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Общее время - по классам"
+  L["WINDOW_TITLE_CHARACTERS"] = "Общее время - по персонажам" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "По классам" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "По персонажам" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "Нет данных"
   L["TOTAL"] = "ИТОГО: "
   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Список персонажей:"
@@ -262,6 +283,7 @@ if GetLocale() == "ruRU" then
   L["TOOLTIP_LEFT_CLICK"] = "ЛКМ:"
   L["TOOLTIP_RIGHT_CLICK"] = "ПКМ:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Открыть/закрыть окно"
+  L["TOOLTIP_HIDE_BUTTON"] = "Скрыть значок миникарты" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Перетаскивание:"
   L["TOOLTIP_MOVE_ICON"] = "Переместить иконку"
   L["TOOLTIP_LOCK_UNLOCK"] = "Закрепить/открепить положение"
@@ -296,6 +318,7 @@ if GetLocale() == "ruRU" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "ПКМ: управление персонажами"
   L["CHAR_PANEL_REMOVE_TIP"] = "Удалить из списка"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "ПКМ: удалить персонажа" -- (AI-GENERATED TRANSLATION)
   L["CLICK_TO_PRINT"] = "ЛКМ: вывести данные в чат"
   L["SETTINGS_PERCENT_ONLY"]     = "Только %"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Показывать только процент после каждой полосы, без значения времени."
@@ -307,6 +330,9 @@ if GetLocale() == "deDE" then
   -- Translator: https://github.com/DaBear78
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Spielzeit nach Klasse"
+  L["WINDOW_TITLE_CHARACTERS"] = "Account Played - Spielzeit nach Charakter" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "Nach Klasse" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "Nach Charakter" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "Noch keine Daten"
   L["TOTAL"] = "GESAMT: "
   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Bekannte Charaktere:"
@@ -320,6 +346,7 @@ if GetLocale() == "deDE" then
   L["TOOLTIP_LEFT_CLICK"] = "Linksklick:"
   L["TOOLTIP_RIGHT_CLICK"] = "Rechtsklick:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Fenster ein-/ausblenden"
+  L["TOOLTIP_HIDE_BUTTON"] = "Minikartensymbol ausblenden" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Ziehen:"
   L["TOOLTIP_MOVE_ICON"] = "Symbol verschieben"
   L["TOOLTIP_LOCK_UNLOCK"] = "Position sperren/entsperren"
@@ -354,6 +381,7 @@ if GetLocale() == "deDE" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Rechtsklick zur Charakterverwaltung"
   L["CHAR_PANEL_REMOVE_TIP"] = "Aus Account Played entfernen"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "Rechtsklick, um Charakter zu löschen" -- (AI-GENERATED TRANSLATION)
   L["CLICK_TO_PRINT"] = "Linksklick zum Ausgeben im Chat"
   L["SETTINGS_PERCENT_ONLY"]     = "Nur %"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Nur den Prozentsatz nach jeder Leiste anzeigen, ohne den Zeitwert."
@@ -365,6 +393,9 @@ if GetLocale() == "esMX" then
   -- Translator: Smooth
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played  - Tiempo por Clase"
+  L["WINDOW_TITLE_CHARACTERS"] = "Account Played - Tiempo por personaje" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "Por clase" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "Por personaje" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "Sin información"
   L["TOTAL"] = "TOTAL:"
   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personajes conocidos:"
@@ -379,6 +410,7 @@ if GetLocale() == "esMX" then
   L["TOOLTIP_LEFT_CLICK"] = "Click Izquierdo:"
   L["TOOLTIP_RIGHT_CLICK"] = "Click derecho:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar ventana"
+  L["TOOLTIP_HIDE_BUTTON"] = "Ocultar icono del minimapa" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Arrastrar:"
   L["TOOLTIP_MOVE_ICON"] = "Mover Icono"
   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posición"
@@ -413,6 +445,7 @@ if GetLocale() == "esMX" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "Clic derecho para eliminar personaje" -- (AI-GENERATED TRANSLATION)
   L["SETTINGS_PERCENT_ONLY"]     = "Solo %"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar solo el porcentaje tras cada barra, sin el valor de tiempo."
   L["SETTINGS_DAYS_ONLY"]       = "Solo días"
@@ -437,6 +470,7 @@ if GetLocale() == "esES" then
   L["TOOLTIP_LEFT_CLICK"] = "Click Izquierdo:"
   L["TOOLTIP_RIGHT_CLICK"] = "Click derecho:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar ventana"
+  L["TOOLTIP_HIDE_BUTTON"] = "Ocultar icono del minimapa" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Arrastrar:"
   L["TOOLTIP_MOVE_ICON"] = "Mover Icono"
   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posición"
@@ -471,6 +505,7 @@ if GetLocale() == "esES" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Click-Derecho para administrar personajes"
   L["CHAR_PANEL_REMOVE_TIP"] = "Quitar de Account Played"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "Clic derecho para eliminar personaje" -- (AI-GENERATED TRANSLATION)
   L["SETTINGS_PERCENT_ONLY"]     = "Solo %"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar solo el porcentaje tras cada barra, sin el valor de tiempo."
   L["SETTINGS_DAYS_ONLY"]       = "Solo días"
@@ -481,6 +516,9 @@ if GetLocale() == "ptBR" then
   -- Translator: Smooth
   L["ADDON_NAME"] = "Account Played"
   L["WINDOW_TITLE"] = "Account Played - Tempo por Classe"
+  L["WINDOW_TITLE_CHARACTERS"] = "Account Played - Tempo por personagem" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CLASS"] = "Por classe" -- (AI-GENERATED TRANSLATION)
+  L["VIEW_BY_CHARACTER"] = "Por personagem" -- (AI-GENERATED TRANSLATION)
   L["NO_DATA"] = "Sem informação"
   L["TOTAL"] = "TOTAL:"
   L["DEBUG_HEADER"] = "[AccountPlayed Debug] Personagens conhecidos:"
@@ -495,6 +533,7 @@ if GetLocale() == "ptBR" then
   L["TOOLTIP_LEFT_CLICK"] = "Clique Esquerdo:"
   L["TOOLTIP_RIGHT_CLICK"] = "Clique Direito:"
   L["TOOLTIP_TOGGLE_WINDOW"] = "Alternar janela"
+  L["TOOLTIP_HIDE_BUTTON"] = "Ocultar ícone do minimapa" -- (AI-GENERATED TRANSLATION)
   L["TOOLTIP_DRAG_MOVE"] = "Arrastar:"
   L["TOOLTIP_MOVE_ICON"] = "Mover Ícone"
   L["TOOLTIP_LOCK_UNLOCK"] = "Bloquear/Desbloquear posição"
@@ -529,6 +568,7 @@ if GetLocale() == "ptBR" then
 
   L["CHAR_PANEL_RIGHT_CLICK"] = "Clique-Direito para gerenciar personagens"
   L["CHAR_PANEL_REMOVE_TIP"] = "Remover do Account Played"
+  L["CHARACTER_RIGHT_CLICK_DELETE"] = "Clique direito para excluir personagem" -- (AI-GENERATED TRANSLATION)
   L["SETTINGS_PERCENT_ONLY"]     = "Só %"
   L["SETTINGS_PERCENT_ONLY_TIP"] = "Mostrar apenas a porcentagem após cada barra, sem o valor de tempo."
   L["SETTINGS_DAYS_ONLY"]       = "Só dias"

@@ -139,7 +139,7 @@ local function CreateMinimapButton()
             GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_DRAG_MOVE"] .. "|r", "|cffffff00" .. L["TOOLTIP_MOVE_ICON"] .. "|r")
         end
         GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_RIGHT_CLICK"] .. "|r", "|cffff8800" .. L["TOOLTIP_LOCK_UNLOCK"] .. "|r")
-        GameTooltip:AddDoubleLine("|cffffffff" .. L["TOOLTIP_CTRL_RIGHT_CLICK"] .. "|r", "|cffff8800" .. L["TOOLTIP_HIDE_BUTTON"] .. "|r")
+        GameTooltip:AddDoubleLine("|cffffffff" .. CTRL_KEY_TEXT .. " + " .. L["TOOLTIP_RIGHT_CLICK"] .. "|r", "|cffff8800" .. L["TOOLTIP_HIDE_BUTTON"] .. "|r")
         GameTooltip:AddLine(" ")
         local statusText = AccountPlayedMinimapDB.locked and "|cffff0000[" .. L["STATUS_LOCKED"] .. "]|r" or "|cff00ff00[" .. L["STATUS_UNLOCKED"] .. "]|r"
         GameTooltip:AddLine(statusText, 1, 1, 1)
