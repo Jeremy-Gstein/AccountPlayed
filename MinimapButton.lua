@@ -22,7 +22,7 @@ local BUTTON_NAME = "AccountPlayed_MinimapButton"
 
 -- Migrate from old angle-only format or initialize defaults
 local function InitDB()
-    if not AccountPlayedMinimapDB then
+    if type(AccountPlayedMinimapDB) ~= "table" then
         AccountPlayedMinimapDB = {}
     end
 
@@ -86,6 +86,8 @@ end
 
 -- Fade animation using Blizzard's built-in system
 local function FadeButton(btn, targetAlpha, duration)
+    -- Enabled icons stay visible even if minimap hover events do not fire.
+    targetAlpha = 1
     duration = duration or 0.15
     
     -- Cancel any existing fades
@@ -123,7 +125,7 @@ local function CreateMinimapButton()
     minimapIcon:SetButtonBorder("AccountPlayed", "Interface\\Minimap\\MiniMap-TrackingBorder", 53, "TOPLEFT")
     minimapIcon:SetButtonHighlightTexture("AccountPlayed", "Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
 
-    btn:SetAlpha(0.01)  -- Start faded out
+    btn:SetAlpha(1)  -- Start visible
 
     -- Tooltip, Click Handlers, and Fade on Hover
     btn:SetScript("OnEnter", function(self)
@@ -303,8 +305,8 @@ local function CreateMinimapButton()
     
     -- Set initial opacity based on snap state
     if btn.snapped then
-        -- Start invisible if snapped, will fade in when mouse enters
-        btn:SetAlpha(0.01)
+        -- Keep snapped icons visible
+        btn:SetAlpha(1)
     else
         -- If not snapped (free-positioned), make it visible
         btn:SetAlpha(1)
@@ -354,7 +356,7 @@ function AP.ResetMinimapButton()
     if btn then
         btn.snapped = true
         UIFrameFadeRemoveFrame(btn)  -- cancel any in-progress fade
-        btn:SetAlpha(0.01)  -- Snapped default: reveal on hover
+        btn:SetAlpha(1)  -- Visible after reset
         UpdateButtonPosition(btn)
         print("|cff00ff00Account Played:|r " .. L["MSG_RESET_SUCCESS"])
     else

@@ -18,8 +18,21 @@ AccountPlayedPopupDB = AccountPlayedPopupDB or {
     useYears = false,
 }
 
+-- Validate UI settings before any module indexes them.
+if type(AccountPlayedPopupDB) ~= "table" then AccountPlayedPopupDB = {} end
+
+function AP.IsValidTime(value)
+    if issecretvalue and issecretvalue(value) then return false end
+    return type(value) == "number" and value == value and value >= 0 and value < math.huge
+end
+
+function AP.IsValidRecord(data)
+    return type(data) == "table" and AP.IsValidTime(data.time)
+end
+
 -- Throttle tracking
-local lastPlayedRequest = 0
+local lastPlayedRequest = nil
+local receivedPlayed = false
 
 -- Frame references
 AP.mainFrame = CreateFrame("Frame")
@@ -37,8 +50,10 @@ end
 
 local function MigrateOldData()
     for charKey, data in pairs(AccountPlayedDB) do
-        if type(data) == "number" then
+        if AP.IsValidTime(data) then
             AccountPlayedDB[charKey] = { time = data, class = "UNKNOWN" }
+        elseif AP.IsValidRecord(data) and type(data.class) ~= "string" then
+            data.class = "UNKNOWN"
         end
     end
 end
@@ -61,12 +76,13 @@ local function GetLocalizedClass(classFile)
     if not classFile or classFile == "UNKNOWN" then
         return L["UNKNOWN"] or "Unknown"
     end
-    return LOCALIZED_CLASS_NAMES_MALE[classFile] or classFile
+    return (LOCALIZED_CLASS_NAMES_MALE and LOCALIZED_CLASS_NAMES_MALE[classFile]) or classFile
 end
 
 local function SafeRequestTimePlayed()
     local now = GetTime()
-    if now - lastPlayedRequest >= 10 then
+    if type(RequestTimePlayed) ~= "function" then return false end
+    if not lastPlayedRequest or now - lastPlayedRequest >= 10 then
         RequestTimePlayed()
         lastPlayedRequest = now
         return true
@@ -135,7 +151,7 @@ end
 local function GetAccountTotal()
     local total = 0
     for _, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.time then
+        if AP.IsValidRecord(data) then
             total = total + data.time
         end
     end
@@ -145,7 +161,7 @@ end
 local function GetClassTotals()
     local totals, accountTotal = {}, 0
     for _, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.time and data.class then
+        if AP.IsValidRecord(data) and data.class then
             totals[data.class] = (totals[data.class] or 0) + data.time
             accountTotal = accountTotal + data.time
         end
@@ -156,7 +172,7 @@ end
 local function GetCharactersByClass(className)
     local chars = {}
     for charKey, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.class == className and data.time then
+        if AP.IsValidRecord(data) and data.class == className then
             table.insert(chars, { key = charKey, time = data.time, class = data.class })
         end
     end
@@ -231,7 +247,7 @@ local function DeleteCharacter(input)
     local foundKey = nil
     local lowerTarget = targetKey:lower()
     for dbKey in pairs(AccountPlayedDB) do
-        if dbKey:lower() == lowerTarget then
+        if type(dbKey) == "string" and dbKey:lower() == lowerTarget then
             foundKey = dbKey
             break
         end
@@ -397,7 +413,7 @@ function AP.ShowCharPanel(className, forceShow, anchorRow)
     for i, row in ipairs(p.charRows) do
         local char = chars[i]
         if char then
-            local name    = char.key:match("%-(.+)$") or char.key
+            local name    = char.key:match("%-([^%-]+)$") or char.key
             local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
             row.nameText:SetText(name)
             row.nameText:SetTextColor(color.r, color.g, color.b)
@@ -487,7 +503,7 @@ local function CreateRow(parent, width, height)
                 GameTooltip:AddLine(localizedName, 1, 1, 1)
                 GameTooltip:AddLine(" ")
                 for _, char in ipairs(chars) do
-                    local name = char.key:match("%-(.+)$") or char.key
+                    local name = char.key:match("%-([^%-]+)$") or char.key
                     local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
                     local color = RAID_CLASS_COLORS[char.class] or { r = 1, g = 1, b = 1 }
                     GameTooltip:AddDoubleLine(name, timeStr, color.r, color.g, color.b, 1, 1, 1)
@@ -519,7 +535,7 @@ local function CreateRow(parent, width, height)
                 local localizedName = GetLocalizedClass(self.className)
                 print("|cff00ff00" .. localizedName .. ":|r")
                 for _, char in ipairs(chars) do
-                    local name = char.key:match("%-(.+)$") or char.key
+                    local name = char.key:match("%-([^%-]+)$") or char.key
                     local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
                     local color = RAID_CLASS_COLORS[char.class] or { r = 1, g = 1, b = 1 }
                     print(string.format("  |cff%02x%02x%02x%s|r - %s",
@@ -712,6 +728,13 @@ local function CreatePopup()
         local accountTotal = GetAccountTotal()
 
         if accountTotal == 0 then
+            for _, row in ipairs(AP.popupRows) do
+                row.className = nil
+                row:Hide()
+            end
+            self.content:SetHeight(22)
+            UpdateScrollBarVisibility(self)
+            if AP.charPanel then AP.charPanel:Hide() end
             AP.popupRows[1].classText:SetText(L["NO_DATA"])
             AP.popupRows[1].bar:SetValue(0)
             AP.popupRows[1].valueText:SetText("")
@@ -778,6 +801,7 @@ local function CreatePopup()
 end
 
 local function UpdatePopup()
+    SafeRequestTimePlayed()
     local f = CreatePopup()
     if f.formatCheckbox then
         f.formatCheckbox:SetChecked(AccountPlayedPopupDB.useYears)
@@ -811,25 +835,39 @@ end
 --------------------------------------------------
 
 AP.mainFrame:RegisterEvent("PLAYER_LOGIN")
-AP.mainFrame:RegisterEvent("TIME_PLAYED_MSG")
+local playedEventOK = pcall(AP.mainFrame.RegisterEvent, AP.mainFrame, "TIME_PLAYED_MSG")
+AP.mainFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 AP.mainFrame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
         MigrateOldData()
         SafeRequestTimePlayed()
+    elseif event == "PLAYER_ENTERING_WORLD" then
+        -- A bounded retry after entering the world, in case the login request was lost.
+        if not receivedPlayed then
+            C_Timer.After(10, function()
+                if not receivedPlayed then SafeRequestTimePlayed() end
+            end)
+        end
     elseif event == "TIME_PLAYED_MSG" then
         local totalTimePlayed = ...
+        if not AP.IsValidTime(totalTimePlayed) then return end
         local realm, name = GetCharInfo()
+        if not realm or not name then return end
+        receivedPlayed = true
         local charKey = GetCharKey(realm, name)
         local _, classFile = UnitClass("player")
         classFile = classFile or "UNKNOWN"
 
         local existing = AccountPlayedDB[charKey]
-        if not existing or not existing.time or totalTimePlayed > existing.time then
+        if not AP.IsValidRecord(existing) or totalTimePlayed > existing.time or classFile ~= existing.class then
             AccountPlayedDB[charKey] = {
                 time = totalTimePlayed,
                 class = classFile,
             }
+            if AP.popupFrame and AP.popupFrame:IsShown() then
+                AP.popupFrame:UpdateDisplay()
+            end
         end
     end
 end)
@@ -841,7 +879,15 @@ end)
 SLASH_ACCOUNTPLAYED1 = "/aplayed"
 SlashCmdList.ACCOUNTPLAYED = function(input)
     input = (input or ""):match("^%s*(.-)%s*$"):lower()
-    if input == "minimap" then
+    if input == "diagnose" then
+        local version, build, _, interface = GetBuildInfo()
+        print("AccountPlayed github-forever-fix3 | " .. tostring(version) .. " / " .. tostring(build) .. " | TOC " .. tostring(interface))
+        print("RequestTimePlayed=" .. type(RequestTimePlayed) .. " | TIME_PLAYED_MSG=" .. tostring(playedEventOK) .. " | Antwort=" .. tostring(receivedPlayed))
+        print("C_Timer=" .. type(C_Timer) .. " | BackdropTemplate=" .. type(BackdropTemplateMixin))
+        DebugListCharacters()
+    elseif input == "refresh" then
+        print("AccountPlayed: Abfrage gestartet=" .. tostring(SafeRequestTimePlayed()) .. " (10 Sekunden Abstand)")
+    elseif input == "minimap" then
         local show = AccountPlayedMinimapDB.hide
         AP.SetMinimapVisible(show)
         print("|cff00ff00Account Played:|r " .. L[show and "MSG_MINIMAP_SHOWN" or "MSG_MINIMAP_HIDDEN"])

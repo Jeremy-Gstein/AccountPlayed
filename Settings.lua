@@ -104,10 +104,13 @@ local function CreateInterfaceOptionsPanel()
     slider:SetWidth(280)
     slider:SetMinMaxValues(1.0, 2.0)
     slider:SetValueStep(0.05)
-    slider:SetObeyStepOnDrag(true)
-    _G[slider:GetName() .. "Low"]:SetText("100%")
-    _G[slider:GetName() .. "High"]:SetText("200%")
-    _G[slider:GetName() .. "Text"]:SetText("")
+    if slider.SetObeyStepOnDrag then slider:SetObeyStepOnDrag(true) end
+    local labelLow = slider.Low or _G[slider:GetName() .. "Low"]
+    if labelLow then labelLow:SetText("100%") end
+    local labelHigh = slider.High or _G[slider:GetName() .. "High"]
+    if labelHigh then labelHigh:SetText("200%") end
+    local labelText = slider.Text or _G[slider:GetName() .. "Text"]
+    if labelText then labelText:SetText("") end
 
     local function RefreshScale()
         scaleValue:SetText(string.format("%d%%", math.floor(slider:GetValue() * 100 + 0.5)))
@@ -250,11 +253,14 @@ local function CreateSettingsPanel()
     slider:SetHeight(16)
     slider:SetMinMaxValues(1.0, 2.0)
     slider:SetValueStep(0.05)
-    slider:SetObeyStepOnDrag(true)
+    if slider.SetObeyStepOnDrag then slider:SetObeyStepOnDrag(true) end
 
-    _G[slider:GetName() .. "Low"]:SetText("100%")
-    _G[slider:GetName() .. "High"]:SetText("200%")
-    _G[slider:GetName() .. "Text"]:SetText("")
+    local labelLow = slider.Low or _G[slider:GetName() .. "Low"]
+    if labelLow then labelLow:SetText("100%") end
+    local labelHigh = slider.High or _G[slider:GetName() .. "High"]
+    if labelHigh then labelHigh:SetText("200%") end
+    local labelText = slider.Text or _G[slider:GetName() .. "Text"]
+    if labelText then labelText:SetText("") end
 
     local function RefreshScaleLabel()
         local v = slider:GetValue()

@@ -94,7 +94,7 @@ function lib:GetAccountTotal()
     local total = 0
     if type(AccountPlayedDB) ~= "table" then return total end
     for _, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and type(data.time) == "number" then
+        if AccountPlayed.IsValidRecord(data) then
             total = total + data.time
         end
     end
@@ -107,7 +107,7 @@ function lib:GetClassTotals()
     local totals, accountTotal = {}, 0
     if type(AccountPlayedDB) ~= "table" then return totals, 0 end
     for _, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.time and data.class then
+        if AccountPlayed.IsValidRecord(data) and data.class then
             totals[data.class] = (totals[data.class] or 0) + data.time
             accountTotal = accountTotal + data.time
         end
@@ -121,7 +121,7 @@ function lib:GetAllCharacters()
     local out = {}
     if type(AccountPlayedDB) ~= "table" then return out end
     for key, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.time then
+        if AccountPlayed.IsValidRecord(data) then
             local realm, name = ParseKey(key)
             out[#out + 1] = {
                 key   = key,
@@ -143,7 +143,7 @@ function lib:GetCharactersByClass(classFile)
     local out = {}
     if type(AccountPlayedDB) ~= "table" then return out end
     for key, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.class == classFile and data.time then
+        if AccountPlayed.IsValidRecord(data) and data.class == classFile then
             local realm, name = ParseKey(key)
             out[#out + 1] = {
                 key   = key,
@@ -163,7 +163,7 @@ function lib:GetCharacterCount()
     local n = 0
     if type(AccountPlayedDB) ~= "table" then return n end
     for _, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.time then
+        if AccountPlayed.IsValidRecord(data) then
             n = n + 1
         end
     end
@@ -180,7 +180,7 @@ function lib:GetCharacterData(realm, name)
     if type(AccountPlayedDB) ~= "table" then return nil end
     local key  = realm .. "-" .. name
     local data = AccountPlayedDB[key]
-    if type(data) == "table" and data.time then
+    if AccountPlayed.IsValidRecord(data) then
         return { key = key, name = name, realm = realm,
                  class = data.class or "UNKNOWN", time = data.time }
     end
@@ -301,6 +301,9 @@ if mainFrame then
     local orig = mainFrame:GetScript("OnEvent")
 
     mainFrame:SetScript("OnEvent", function(self, event, ...)
+        local realmBefore, nameBefore = CurrentRealmName(), UnitName("player")
+        local keyBefore = realmBefore and nameBefore and (realmBefore .. "-" .. nameBefore)
+        local before = keyBefore and AccountPlayedDB and AccountPlayedDB[keyBefore]
         -- Run the original handler first so the DB is already updated.
         if orig then orig(self, event, ...) end
 
@@ -314,7 +317,7 @@ if mainFrame then
             -- (the main addon skips values that are not newer).
             local key  = realm and name and (realm .. "-" .. name)
             local data = key and AccountPlayedDB and AccountPlayedDB[key]
-            if data and type(data) == "table" and data.time == seconds then
+            if AccountPlayed.IsValidTime(seconds) and AccountPlayed.IsValidRecord(data) and data ~= before and data.time == seconds then
                 lib.callbacks:Fire("CharacterUpdated", realm, name, seconds, cls or "UNKNOWN")
             end
         end
