@@ -16,7 +16,11 @@ AccountPlayedPopupDB = AccountPlayedPopupDB or {
     x = 0,
     y = 0,
     useYears = false,
+    viewMode = "classes",
 }
+if AccountPlayedPopupDB.viewMode == nil then
+    AccountPlayedPopupDB.viewMode = "classes"
+end
 
 -- Throttle tracking
 local lastPlayedRequest = 0
@@ -120,10 +124,15 @@ local function FormatTimeTotal(seconds, useYears)
     local hours = seconds / 3600
 
     if useYears and hours >= 9000 then
-        local days = math.floor(hours / 24)
+        local totalHours = math.floor(hours)
+        local days = math.floor(totalHours / 24)
         local years = math.floor(days / 365)
         local remDays = days % 365
-        return years > 0 and string.format("%d%s %d%s", years, L["TIME_UNIT_YEAR"], remDays, L["TIME_UNIT_DAY"]) or string.format("%d%s", days, L["TIME_UNIT_DAY"])
+        local remHours = totalHours % 24
+        return years > 0 and string.format("%d%s %d%s %d%s (%d%s %d%s)",
+            years, L["TIME_UNIT_YEAR"], remDays, L["TIME_UNIT_DAY"], remHours, L["TIME_UNIT_HOUR"],
+            days, L["TIME_UNIT_DAY"], remHours, L["TIME_UNIT_HOUR"])
+            or string.format("%d%s %d%s", days, L["TIME_UNIT_DAY"], remHours, L["TIME_UNIT_HOUR"])
     end
     return FormatTimeSmart(seconds, useYears)
 end
@@ -153,11 +162,11 @@ local function GetClassTotals()
     return totals, accountTotal
 end
 
-local function GetCharactersByClass(className)
+local function GetCharacters(className)
     local chars = {}
     for charKey, data in pairs(AccountPlayedDB) do
-        if type(data) == "table" and data.class == className and data.time then
-            table.insert(chars, { key = charKey, time = data.time, class = data.class })
+        if type(data) == "table" and data.time and (not className or data.class == className) then
+            table.insert(chars, { key = charKey, time = data.time, class = data.class or "UNKNOWN" })
         end
     end
     table.sort(chars, function(a, b) return a.time > b.time end)
@@ -369,7 +378,7 @@ function AP.ShowCharPanel(className, forceShow, anchorRow)
         return
     end
 
-    local chars = GetCharactersByClass(className)
+    local chars = GetCharacters(className)
     if #chars == 0 then
         p:Hide()
         AP.charPanelClass = nil
@@ -427,13 +436,13 @@ end
 --
 -- Right-hand budget (from row right edge, working inward):
 --   4px  outer margin  (was 6px, trimmed)
---   70px value text    (enough for "99.9% - 160d")
+--   100px value text    (enough for "99.9% - 99999h")
 --   4px  gap between value text and bar
 --
--- Total reserved on the right: 78px  (was 148px — we recovered 70px for the bar)
+-- Total reserved on the right: 108px  (was 148px — we recovered 70px for the bar. Increased to 108px to accommodate the longer time strings)
 local CLASS_COL_W    = 140   -- wide enough for "Death Knight" / "Demon Hunter"
 local CLASS_BAR_GAP  =   6   -- gap between class label and bar left edge
-local VALUE_COL_W    =  80   -- value text width  ("99.9% - 999d" fits easily)
+local VALUE_COL_W    = 100   -- value text width  ("99.9% - 99999h" fits easily)
 local RIGHT_MARGIN   =   4   -- gap from row right edge to value text right edge
 -- Bar right anchor offset = VALUE_COL_W + gap-before-value + RIGHT_MARGIN
 --   gap-before-value is also 4px so bar doesn't butt up against the number
@@ -479,12 +488,22 @@ local function CreateRow(parent, width, height)
 
     row:SetScript("OnEnter", function(self)
         self.highlight:Show()
-        if self.className then
-            local chars = GetCharactersByClass(self.className)
+        if self.characterKey then
+            local class = self.characterClass or "UNKNOWN"
+            local color = RAID_CLASS_COLORS[class] or { r = 1, g = 1, b = 1 }
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:AddLine(self.characterKey, color.r, color.g, color.b)
+            GameTooltip:AddLine(GetLocalizedClass(class), 1, 1, 1)
+            GameTooltip:AddLine(FormatTimeDetailed(self.characterTime, AccountPlayedPopupDB.useYears), 1, 1, 1)
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(L["CLICK_TO_PRINT"], 0.5, 0.5, 0.5)
+            GameTooltip:AddLine(L["CHARACTER_RIGHT_CLICK_DELETE"], 0.5, 0.5, 0.5)
+            GameTooltip:Show()
+        elseif self.className then
+            local chars = GetCharacters(self.className)
             if #chars > 0 then
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-                local localizedName = GetLocalizedClass(self.className)
-                GameTooltip:AddLine(localizedName, 1, 1, 1)
+                GameTooltip:AddLine(GetLocalizedClass(self.className), 1, 1, 1)
                 GameTooltip:AddLine(" ")
                 for _, char in ipairs(chars) do
                     local name = char.key:match("%-(.+)$") or char.key
@@ -506,6 +525,19 @@ local function CreateRow(parent, width, height)
     end)
 
     row:SetScript("OnClick", function(self, button)
+        if self.characterKey then
+            if button == "RightButton" then
+                ConfirmDeleteKey(self.characterKey)
+            else
+                local class = GetLocalizedClass(self.characterClass)
+                local color = RAID_CLASS_COLORS[self.characterClass] or { r = 1, g = 1, b = 1 }
+                local name = self.characterKey:match("%-(.+)$") or self.characterKey
+                print(string.format("|cff%02x%02x%02x%s|r - %s (%s)",
+                    color.r * 255, color.g * 255, color.b * 255, name,
+                    FormatTimeDetailed(self.characterTime, AccountPlayedPopupDB.useYears), class))
+            end
+            return
+        end
         if not self.className then return end
 
         if button == "RightButton" then
@@ -513,7 +545,7 @@ local function CreateRow(parent, width, height)
             PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             AP.ShowCharPanel(self.className, false, self)
         else
-            local chars = GetCharactersByClass(self.className)
+            local chars = GetCharacters(self.className)
             if #chars > 0 then
                 PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
                 local localizedName = GetLocalizedClass(self.className)
@@ -628,7 +660,7 @@ local function CreatePopup()
     end)
 
     local scrollFrame = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
-    scrollFrame:SetPoint("TOPLEFT", 15, -40)
+    scrollFrame:SetPoint("TOPLEFT", 15, -64)
     scrollFrame:SetPoint("BOTTOMRIGHT", -30, 50)
     f.scrollFrame = scrollFrame
 
@@ -706,27 +738,60 @@ local function CreatePopup()
 
     f.formatCheckbox = checkBox
 
+    local viewButton = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    viewButton:SetSize(120, 22)
+    viewButton:SetPoint("TOPLEFT", 18, -39)
+    viewButton:SetScript("OnClick", function()
+        AccountPlayedPopupDB.viewMode = AccountPlayedPopupDB.viewMode == "characters" and "classes" or "characters"
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        if AP.popupFrame and AP.popupFrame.UpdateDisplay then
+            AP.popupFrame:UpdateDisplay()
+        end
+    end)
+    f.viewButton = viewButton
+
     -- Display update method
     f.UpdateDisplay = function(self)
-        local totals = GetClassTotals()
         local accountTotal = GetAccountTotal()
+        local isCharacterView = AccountPlayedPopupDB.viewMode == "characters"
+        local sorted
 
-        if accountTotal == 0 then
+        if isCharacterView then
+            sorted = GetCharacters()
+        else
+            local totals = GetClassTotals()
+            sorted = {}
+            for class, time in pairs(totals) do
+                table.insert(sorted, { class = class, time = time })
+            end
+            table.sort(sorted, function(a, b) return a.time > b.time end)
+        end
+
+        viewButton:SetText(isCharacterView and L["VIEW_BY_CLASS"] or L["VIEW_BY_CHARACTER"])
+        self.title:SetText(isCharacterView and L["WINDOW_TITLE_CHARACTERS"] or L["WINDOW_TITLE"])
+
+        if accountTotal == 0 or #sorted == 0 then
             AP.popupRows[1].classText:SetText(L["NO_DATA"])
             AP.popupRows[1].bar:SetValue(0)
             AP.popupRows[1].valueText:SetText("")
+            AP.popupRows[1].className = nil
+            AP.popupRows[1].characterKey = nil
             AP.popupRows[1]:Show()
+            for i = 2, #AP.popupRows do AP.popupRows[i]:Hide() end
+            self.content:SetHeight(22)
+            UpdateScrollBarVisibility(self)
             self.totalRow:SetText(L["TOTAL"] .. FormatTimeTotal(0, AccountPlayedPopupDB.useYears))
             return
         end
 
-        local sorted = {}
-        for class, time in pairs(totals) do
-            table.insert(sorted, { class = class, time = time })
-        end
-        table.sort(sorted, function(a, b) return a.time > b.time end)
-
         local topTime = sorted[1].time
+
+        for i = #AP.popupRows + 1, #sorted do
+            local row = CreateRow(self.content, self.scrollFrame:GetWidth(), 22)
+            row:SetPoint("TOPLEFT", 0, -(i - 1) * 22)
+            row:Hide()
+            AP.popupRows[i] = row
+        end
 
         for i, row in ipairs(AP.popupRows) do
             local entry = sorted[i]
@@ -734,9 +799,14 @@ local function CreatePopup()
                 local percent    = entry.time / accountTotal
                 local barPercent = entry.time / topTime
                 local color      = RAID_CLASS_COLORS[entry.class] or { r = 1, g = 1, b = 1 }
+                local label = isCharacterView and (entry.key:match("%-(.+)$") or entry.key) or GetLocalizedClass(entry.class)
 
-                row.className = entry.class
-                row.classText:SetText(GetLocalizedClass(entry.class))
+                row.className = not isCharacterView and entry.class or nil
+                row.characterKey = isCharacterView and entry.key or nil
+                row.characterClass = isCharacterView and entry.class or nil
+                row.characterTime = isCharacterView and entry.time or nil
+                row.classText:SetWidth(isCharacterView and 180 or CLASS_COL_W)
+                row.classText:SetText(label)
                 row.classText:SetTextColor(color.r, color.g, color.b)
                 row.bar:SetValue(barPercent)
                 row.bar:SetStatusBarColor(color.r, color.g, color.b)
@@ -759,6 +829,9 @@ local function CreatePopup()
                 row:Show()
             else
                 row.className = nil
+                row.characterKey = nil
+                row.characterClass = nil
+                row.characterTime = nil
                 row:Hide()
             end
         end
