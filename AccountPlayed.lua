@@ -47,14 +47,57 @@ end
 -- Core Helpers
 --------------------------------------------------
 
+-- DB layout
+--   AccountPlayedDB[key] = { time, class, name, realm, guid }
+--
+-- key is the character GUID (UnitGUID("player")), which is unique per
+-- character in every WoW version and never depends on how names are
+-- formatted (first name only, first + last name, realm suffixes, ...).
+-- name / realm are stored as plain display data and refreshed on every
+-- login, so renames and realm transfers keep the same entry.
+--
+-- Legacy entries (pre-GUID) are keyed "Realm-Name" and have no guid field.
+-- They keep working and are claimed by the matching character on login.
+
 local function GetCharInfo()
     local name = UnitName("player")
     local realm = GetNormalizedRealmName and GetNormalizedRealmName() or GetRealmName()
-    return realm, name
+    local guid = UnitGUID and UnitGUID("player")
+    return realm, name, guid
 end
 
-local function GetCharKey(realm, name)
+local function GetLegacyKey(realm, name)
     return realm .. "-" .. name
+end
+
+local function GetCharKey(realm, name, guid)
+    return guid or GetLegacyKey(realm, name)
+end
+
+AP.GetCurrentKey = function()
+    local realm, name, guid = GetCharInfo()
+    if not guid and not (realm and name) then return nil end
+    return GetCharKey(realm, name, guid)
+end
+
+-- Legacy keys are "Realm-Name"; character names never contain a hyphen,
+-- so split on the LAST one.
+local function ParseLegacyKey(key)
+    local realm = key:match("^(.+)%-[^%-]+$")
+    local name  = key:match("%-([^%-]+)$")
+    return realm or "", name or key
+end
+
+-- Resolve realm and name for any entry (GUID-keyed or legacy).
+local function GetEntryIdentity(key, data)
+    local realm = type(data) == "table" and data.realm or nil
+    local name  = type(data) == "table" and data.name or nil
+    if not realm or not name then
+        local pRealm, pName = ParseLegacyKey(tostring(key))
+        realm = realm or pRealm
+        name  = name or pName
+    end
+    return realm, name
 end
 
 local function GetLocalizedClass(classFile)
@@ -153,14 +196,50 @@ local function GetClassTotals()
     return totals, accountTotal
 end
 
+-- Build a display label for each character.  Plain name by default; if two
+-- characters in the list share a name, add the realm; if they still collide
+-- (same name on the same realm), add the tail of the entry key.
+local function AssignLabels(chars)
+    local nameCount = {}
+    for _, c in ipairs(chars) do
+        local k = c.name:lower()
+        nameCount[k] = (nameCount[k] or 0) + 1
+    end
+
+    local labelCount = {}
+    for _, c in ipairs(chars) do
+        if nameCount[c.name:lower()] > 1 then
+            c.label = c.name .. "-" .. c.realm
+        else
+            c.label = c.name
+        end
+        local k = c.label:lower()
+        labelCount[k] = (labelCount[k] or 0) + 1
+    end
+
+    for _, c in ipairs(chars) do
+        if labelCount[c.label:lower()] > 1 then
+            c.label = c.label .. " (" .. tostring(c.key):sub(-4) .. ")"
+        end
+    end
+end
+
 local function GetCharactersByClass(className)
     local chars = {}
     for charKey, data in pairs(AccountPlayedDB) do
         if type(data) == "table" and data.class == className and data.time then
-            table.insert(chars, { key = charKey, time = data.time, class = data.class })
+            local realm, name = GetEntryIdentity(charKey, data)
+            table.insert(chars, {
+                key   = charKey,
+                time  = data.time,
+                class = data.class,
+                name  = name,
+                realm = realm,
+            })
         end
     end
     table.sort(chars, function(a, b) return a.time > b.time end)
+    AssignLabels(chars)
     return chars
 end
 
@@ -177,7 +256,8 @@ local function DebugListCharacters()
         else
             time, class = data, "UNKNOWN"
         end
-        print(string.format(" |cffffff00 - %s : %s (%s)|r", charKey, FormatTime(time), class))
+        local realm, name = GetEntryIdentity(charKey, type(data) == "table" and data or nil)
+        print(string.format(" |cffffff00 - %s-%s : %s (%s)|r", name, realm, FormatTime(time), class))
     end
 end
 
@@ -194,8 +274,9 @@ StaticPopupDialogs["ACCOUNTPLAYED_CONFIRM_DELETE"] = {
     button2       = CANCEL,
     OnAccept      = function(self, data)
         if not data or not data.foundKey then return end
+        local realm, name = GetEntryIdentity(data.foundKey, AccountPlayedDB[data.foundKey])
         AccountPlayedDB[data.foundKey] = nil
-        print("|cff00ff00" .. string.format(L["CMD_DELETE_SUCCESS"], data.foundKey) .. "|r")
+        print("|cff00ff00" .. string.format(L["CMD_DELETE_SUCCESS"], name .. "-" .. realm) .. "|r")
         if AP.popupFrame and AP.popupFrame:IsShown() then
             AP.popupFrame:UpdateDisplay()
         end
@@ -207,8 +288,9 @@ StaticPopupDialogs["ACCOUNTPLAYED_CONFIRM_DELETE"] = {
 }
 
 local function ConfirmDeleteKey(foundKey)
+    local realm, name = GetEntryIdentity(foundKey, AccountPlayedDB[foundKey])
     StaticPopupDialogs["ACCOUNTPLAYED_CONFIRM_DELETE"].text =
-        string.format(L["CMD_DELETE_CONFIRM"], foundKey)
+        string.format(L["CMD_DELETE_CONFIRM"], name .. "-" .. realm)
     StaticPopup_Show("ACCOUNTPLAYED_CONFIRM_DELETE", nil, nil, { foundKey = foundKey })
 end
 
@@ -226,16 +308,21 @@ local function DeleteCharacter(input)
         return
     end
 
-    local targetKey = realmName .. "-" .. charName
+    local lowerName  = charName:lower()
+    local lowerRealm = realmName:lower()
 
-    local foundKey = nil
-    local lowerTarget = targetKey:lower()
-    for dbKey in pairs(AccountPlayedDB) do
-        if dbKey:lower() == lowerTarget then
-            foundKey = dbKey
-            break
+    -- Match on the stored name/realm (works for GUID-keyed and legacy entries).
+    -- If several entries share a name and realm, the lowest key wins so the
+    -- result is deterministic; the per-class panel can remove any specific one.
+    local matches = {}
+    for dbKey, data in pairs(AccountPlayedDB) do
+        local realm, name = GetEntryIdentity(dbKey, type(data) == "table" and data or nil)
+        if name:lower() == lowerName and realm:lower() == lowerRealm then
+            matches[#matches + 1] = dbKey
         end
     end
+    table.sort(matches)
+    local foundKey = matches[1]
 
     if not foundKey then
         print("|cffff0000" .. string.format(L["CMD_DELETE_NOT_FOUND"], input) .. "|r")
@@ -397,7 +484,7 @@ function AP.ShowCharPanel(className, forceShow, anchorRow)
     for i, row in ipairs(p.charRows) do
         local char = chars[i]
         if char then
-            local name    = char.key:match("%-(.+)$") or char.key
+            local name    = char.label
             local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
             row.nameText:SetText(name)
             row.nameText:SetTextColor(color.r, color.g, color.b)
@@ -487,7 +574,7 @@ local function CreateRow(parent, width, height)
                 GameTooltip:AddLine(localizedName, 1, 1, 1)
                 GameTooltip:AddLine(" ")
                 for _, char in ipairs(chars) do
-                    local name = char.key:match("%-(.+)$") or char.key
+                    local name = char.label
                     local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
                     local color = RAID_CLASS_COLORS[char.class] or { r = 1, g = 1, b = 1 }
                     GameTooltip:AddDoubleLine(name, timeStr, color.r, color.g, color.b, 1, 1, 1)
@@ -519,7 +606,7 @@ local function CreateRow(parent, width, height)
                 local localizedName = GetLocalizedClass(self.className)
                 print("|cff00ff00" .. localizedName .. ":|r")
                 for _, char in ipairs(chars) do
-                    local name = char.key:match("%-(.+)$") or char.key
+                    local name = char.label
                     local timeStr = FormatTimeDetailed(char.time, AccountPlayedPopupDB.useYears)
                     local color = RAID_CLASS_COLORS[char.class] or { r = 1, g = 1, b = 1 }
                     print(string.format("  |cff%02x%02x%02x%s|r - %s",
@@ -819,17 +906,44 @@ AP.mainFrame:SetScript("OnEvent", function(self, event, ...)
         SafeRequestTimePlayed()
     elseif event == "TIME_PLAYED_MSG" then
         local totalTimePlayed = ...
-        local realm, name = GetCharInfo()
-        local charKey = GetCharKey(realm, name)
+        local realm, name, guid = GetCharInfo()
+        if not name or not (guid or realm) then return end
+        local charKey = GetCharKey(realm, name, guid)
         local _, classFile = UnitClass("player")
         classFile = classFile or "UNKNOWN"
 
         local existing = AccountPlayedDB[charKey]
+        if type(existing) ~= "table" then existing = nil end
+
+        -- First login of a GUID-tracked character: claim its legacy
+        -- "Realm-Name" entry, if there is one that plausibly belongs to it.
+        -- Played time only ever grows, so a legacy entry with MORE time or a
+        -- different class is a different character that happened to share the
+        -- name; leave that one alone for its own owner to claim.
+        if guid and not existing then
+            local legacyKey = GetLegacyKey(realm, name)
+            local legacy = AccountPlayedDB[legacyKey]
+            if type(legacy) == "table" and legacy.time and not legacy.guid
+                and legacy.time <= totalTimePlayed
+                and (legacy.class == classFile or legacy.class == "UNKNOWN") then
+                AccountPlayedDB[legacyKey] = nil
+            end
+        end
+
         if not existing or not existing.time or totalTimePlayed > existing.time then
             AccountPlayedDB[charKey] = {
-                time = totalTimePlayed,
+                time  = totalTimePlayed,
                 class = classFile,
+                name  = name,
+                realm = realm,
+                guid  = guid,
             }
+        else
+            -- Time is not newer, but keep identity data current (renames, transfers).
+            existing.class = classFile
+            existing.name  = name
+            existing.realm = realm
+            existing.guid  = guid
         end
     end
 end)
