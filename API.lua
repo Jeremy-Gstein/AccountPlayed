@@ -32,9 +32,19 @@
         Fires after AccountPlayedDB is written for the current character
         (i.e. after every TIME_PLAYED_MSG that changes the stored value).
 
+    DATABASE KEYS
+    -------------
+    Entries are keyed by character GUID, NOT by "Realm-Name".  Each entry
+    returned by this API has { key, guid, name, realm, class, time }.
+    Use name/realm for display and key/guid for identity.  Entries saved by
+    older versions are keyed "Realm-Name" (guid = nil) until that character
+    next logs in.
+
     API VERSION
     -----------
     1  –  initial release
+    2  –  entries keyed by GUID; results include guid; name/realm come from
+          stored fields (legacy "Realm-Name" keys still resolve)
 --]]
 
 ------------------------------------------------------------------------
@@ -43,7 +53,7 @@
 
 
 -- Both LibStub and CallbackHandler-1.0 are already loaded by AccountPlayed.
-local MAJOR, MINOR = "AccountPlayed-1.0", 1
+local MAJOR, MINOR = "AccountPlayed-1.0", 2
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end  -- already up-to-date; nothing to do
 
@@ -53,19 +63,30 @@ if not lib then return end  -- already up-to-date; nothing to do
 -- (Same pattern BigWigs uses: BigWigs.callbacks = CH:New(BigWigs))
 lib.callbacks = lib.callbacks or LibStub("CallbackHandler-1.0"):New(lib)
 
-lib.API_VERSION = 1
+lib.API_VERSION = 2
 
 ------------------------------------------------------------------------
 -- Private helpers
 ------------------------------------------------------------------------
 
--- DB key format is "RealmName-CharName".
--- Realm names can contain hyphens (e.g. "Azjol-Nerub"), character names
--- never do, so we always split on the LAST hyphen.
+-- Legacy DB key format is "RealmName-CharName" (current entries are keyed by
+-- GUID and carry name/realm fields).  Character names never contain a hyphen,
+-- so legacy keys are split on the LAST hyphen.
 local function ParseKey(key)
     local realm = key:match("^(.+)%-[^%-]+$")
     local name  = key:match("%-([^%-]+)$")
     return realm or key, name or key
+end
+
+-- Realm and name for any entry, preferring the stored fields.
+local function ResolveIdentity(key, data)
+    local realm, name = data.realm, data.name
+    if not realm or not name then
+        local pRealm, pName = ParseKey(tostring(key))
+        realm = realm or pRealm
+        name  = name or pName
+    end
+    return realm, name
 end
 
 local function CurrentRealmName()
@@ -116,15 +137,16 @@ function lib:GetClassTotals()
 end
 
 --- All tracked characters, sorted descending by time.
--- Each entry: { key, name, realm, class, time }
+-- Each entry: { key, guid, name, realm, class, time }
 function lib:GetAllCharacters()
     local out = {}
     if type(AccountPlayedDB) ~= "table" then return out end
     for key, data in pairs(AccountPlayedDB) do
         if type(data) == "table" and data.time then
-            local realm, name = ParseKey(key)
+            local realm, name = ResolveIdentity(key, data)
             out[#out + 1] = {
                 key   = key,
+                guid  = data.guid,
                 name  = name,
                 realm = realm,
                 class = data.class or "UNKNOWN",
@@ -138,15 +160,16 @@ end
 
 --- Characters of a specific class, sorted descending by time.
 -- @param classFile  string  e.g. "WARRIOR", "MAGE"
--- Each entry: { key, name, realm, class, time }
+-- Each entry: { key, guid, name, realm, class, time }
 function lib:GetCharactersByClass(classFile)
     local out = {}
     if type(AccountPlayedDB) ~= "table" then return out end
     for key, data in pairs(AccountPlayedDB) do
         if type(data) == "table" and data.class == classFile and data.time then
-            local realm, name = ParseKey(key)
+            local realm, name = ResolveIdentity(key, data)
             out[#out + 1] = {
                 key   = key,
+                guid  = data.guid,
                 name  = name,
                 realm = realm,
                 class = data.class,
@@ -175,16 +198,22 @@ end
 ------------------------------------------------------------------------
 
 --- Data for a specific character, or nil if not tracked.
--- Returns { key, name, realm, class, time }
+-- Matched on stored name + realm.  If several tracked characters share both
+-- (e.g. a deleted and re-created character), the one with the most time wins.
+-- Returns { key, guid, name, realm, class, time }
 function lib:GetCharacterData(realm, name)
     if type(AccountPlayedDB) ~= "table" then return nil end
-    local key  = realm .. "-" .. name
-    local data = AccountPlayedDB[key]
-    if type(data) == "table" and data.time then
-        return { key = key, name = name, realm = realm,
-                 class = data.class or "UNKNOWN", time = data.time }
+    local best
+    for key, data in pairs(AccountPlayedDB) do
+        if type(data) == "table" and data.time then
+            local r, n = ResolveIdentity(key, data)
+            if r == realm and n == name and (not best or data.time > best.time) then
+                best = { key = key, guid = data.guid, name = n, realm = r,
+                         class = data.class or "UNKNOWN", time = data.time }
+            end
+        end
     end
-    return nil
+    return best
 end
 
 --- True when the character has a tracked entry.
@@ -195,6 +224,11 @@ end
 --- Played time for the currently logged-in character, or nil.
 function lib:GetCurrentCharacterTime()
     if not UnitName then return nil end
+    local guid = UnitGUID and UnitGUID("player")
+    local entry = guid and type(AccountPlayedDB) == "table" and AccountPlayedDB[guid]
+    if type(entry) == "table" and entry.time then
+        return entry.time
+    end
     local name  = UnitName("player")
     local realm = CurrentRealmName()
     if not name or not realm then return nil end
@@ -306,16 +340,15 @@ if mainFrame then
 
         if event == "TIME_PLAYED_MSG" then
             local seconds = ...
-            local name    = UnitName("player")
-            local realm   = CurrentRealmName()
             local _, cls  = UnitClass("player")
 
             -- Only fire when the DB actually accepted the new value
             -- (the main addon skips values that are not newer).
-            local key  = realm and name and (realm .. "-" .. name)
+            local key  = AccountPlayed.GetCurrentKey and AccountPlayed.GetCurrentKey()
             local data = key and AccountPlayedDB and AccountPlayedDB[key]
             if data and type(data) == "table" and data.time == seconds then
-                lib.callbacks:Fire("CharacterUpdated", realm, name, seconds, cls or "UNKNOWN")
+                local realm, name = ResolveIdentity(key, data)
+                lib.callbacks:Fire("CharacterUpdated", realm, name, seconds, data.class or cls or "UNKNOWN")
             end
         end
     end)
